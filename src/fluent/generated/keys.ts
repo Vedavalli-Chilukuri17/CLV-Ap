@@ -29,6 +29,14 @@ declare global {
                         table: 'sys_ui_page'
                         id: 'c79472a9feaf4df0b2506cc5da3fc491'
                     }
+                    'clv-portal': {
+                        table: 'sys_ui_page'
+                        id: 'a7919d0d3e574364bf4d03c2180752ac'
+                    }
+                    CLVDashboardAjax: {
+                        table: 'sys_script_include'
+                        id: 'e9a1182bc2104871bd8b16af6d17d5b5'
+                    }
                     eba344c7eba1b2d04870fc4dbad0cd0b: {
                         table: 'sys_app_module'
                         id: 'eba344c7eba1b2d04870fc4dbad0cd0b'
@@ -37,6 +45,10 @@ declare global {
                     package_json: {
                         table: 'sys_module'
                         id: '5c56f084d96149da8e859a7626ffc839'
+                    }
+                    'src_server_script-includes_clv-dashboard-ajax_js': {
+                        table: 'sys_module'
+                        id: '939eb1fcd2974e06a757ef416ec03a82'
                     }
                     'x_hete_clvmaximi_0/main': {
                         table: 'sys_ux_lib_asset'
