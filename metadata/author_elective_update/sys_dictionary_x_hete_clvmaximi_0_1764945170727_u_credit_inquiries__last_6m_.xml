@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_dictionary action="DELETE" element="u_credit_inquiries__last_6m_" table="x_hete_clvmaximi_0_1764945170727">
+        <active>true</active>
+        <array>false</array>
+        <attributes>import_attribute_name=Credit Inquiries (last 6m)</attributes>
+        <audit>false</audit>
+        <calculation/>
+        <choice>0</choice>
+        <choice_field/>
+        <choice_table/>
+        <column_label>Credit Inquiries (last 6m)</column_label>
+        <comments/>
+        <create_roles/>
+        <default_value/>
+        <defaultsort/>
+        <delete_roles/>
+        <dependent/>
+        <dependent_on_field/>
+        <display>false</display>
+        <dynamic_creation>false</dynamic_creation>
+        <dynamic_creation_script/>
+        <dynamic_default_value/>
+        <dynamic_ref_qual/>
+        <element>u_credit_inquiries__last_6m_</element>
+        <element_reference>false</element_reference>
+        <foreign_database/>
+        <formula/>
+        <function_definition/>
+        <function_field>false</function_field>
+        <internal_type display_value="Integer">integer</internal_type>
+        <mandatory>false</mandatory>
+        <max_length>40</max_length>
+        <name>x_hete_clvmaximi_0_1764945170727</name>
+        <next_element/>
+        <primary>false</primary>
+        <read_only>false</read_only>
+        <read_roles/>
+        <reference/>
+        <reference_cascade_rule/>
+        <reference_floats>false</reference_floats>
+        <reference_key/>
+        <reference_qual/>
+        <reference_qual_condition/>
+        <reference_type/>
+        <spell_check>false</spell_check>
+        <staged>false</staged>
+        <sys_class_name>sys_dictionary</sys_class_name>
+        <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+        <sys_created_on>2025-12-05 14:33:08</sys_created_on>
+        <sys_id>03a304c7eba1b2d04870fc4dbad0cd0c</sys_id>
+        <sys_name>Credit Inquiries (last 6m)</sys_name>
+        <sys_package display_value="CLVMaximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="CLVMaximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope>
+        <sys_update_name>sys_dictionary_x_hete_clvmaximi_0_1764945170727_u_credit_inquiries__last_6m_</sys_update_name>
+        <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+        <sys_updated_on>2025-12-05 14:33:08</sys_updated_on>
+        <table_reference>false</table_reference>
+        <text_index>false</text_index>
+        <unique>false</unique>
+        <use_dependent_field>false</use_dependent_field>
+        <use_dynamic_default>false</use_dynamic_default>
+        <use_reference_qualifier>simple</use_reference_qualifier>
+        <virtual>false</virtual>
+        <virtual_type>script</virtual_type>
+        <widget/>
+        <write_roles/>
+        <xml_view>false</xml_view>
+    </sys_dictionary>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="CLV Maximization">2a21c44feb61b2d04870fc4dbad0cdc6</application>
+        <file_path/>
+        <instance_id>19d9a8401b3bf11419254089bd4bcbcc</instance_id>
+        <instance_name>ven06937</instance_name>
+        <name>sys_dictionary_x_hete_clvmaximi_0_1764945170727_u_credit_inquiries__last_6m_</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_dictionary action="INSERT_OR_UPDATE" element="u_credit_inquiries__last_6m_" table="x_hete_clvmaximi_0_1764945170727"><active>true</active><array>false</array><attributes>import_attribute_name=Credit Inquiries (last 6m)</attributes><audit>false</audit><calculation/><choice>0</choice><choice_field/><choice_table/><column_label>Credit Inquiries (last 6m)</column_label><comments/><create_roles/><default_value/><defaultsort/><delete_roles/><dependent/><dependent_on_field/><display>false</display><dynamic_creation>false</dynamic_creation><dynamic_creation_script/><dynamic_default_value/><dynamic_ref_qual/><element>u_credit_inquiries__last_6m_</element><element_reference>false</element_reference><foreign_database/><formula/><function_definition/><function_field>false</function_field><internal_type display_value="Integer">integer</internal_type><mandatory>false</mandatory><max_length>40</max_length><name>x_hete_clvmaximi_0_1764945170727</name><next_element/><primary>false</primary><read_only>false</read_only><read_roles/><reference/><reference_cascade_rule/><reference_floats>false</reference_floats><reference_key/><reference_qual/><reference_qual_condition/><reference_type/><spell_check>false</spell_check><staged>false</staged><sys_class_name>sys_dictionary</sys_class_name><sys_created_by>InderpalS@hexaware.com</sys_created_by><sys_created_on>2025-12-05 14:33:08</sys_created_on><sys_id>03a304c7eba1b2d04870fc4dbad0cd0c</sys_id><sys_name>Credit Inquiries (last 6m)</sys_name><sys_package display_value="CLVMaximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package><sys_policy/><sys_scope display_value="CLVMaximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope><sys_update_name>sys_dictionary_x_hete_clvmaximi_0_1764945170727_u_credit_inquiries__last_6m_</sys_update_name><sys_updated_by>InderpalS@hexaware.com</sys_updated_by><sys_updated_on>2025-12-05 14:33:08</sys_updated_on><table_reference>false</table_reference><text_index>false</text_index><unique>false</unique><use_dependent_field>false</use_dependent_field><use_dynamic_default>false</use_dynamic_default><use_reference_qualifier>simple</use_reference_qualifier><virtual>false</virtual><virtual_type>script</virtual_type><widget/><write_roles/><xml_view>false</xml_view></sys_dictionary></record_update>]]></payload>
+        <payload_hash>-1819965430</payload_hash>
+        <record_name>Clvmaximi 0 1764945170727.Credit Inquiries (last 6m)</record_name>
+        <reverted_from/>
+        <source>2a21c44feb61b2d04870fc4dbad0cdc9</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+        <sys_created_on>2025-12-05 14:33:09</sys_created_on>
+        <sys_id>57a304c7eba1b2d04870fc4dbad0cd8d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19aeeee5a820000001</sys_recorded_at>
+        <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+        <sys_updated_on>2025-12-05 14:33:09</sys_updated_on>
+        <type>Dictionary</type>
+        <update_guid>dba304c7d9a1b2d0dcc8ad4ac78f9c8c</update_guid>
+        <update_guid_history>dba304c7d9a1b2d0dcc8ad4ac78f9c8c:-1819965430</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+        <sys_created_on>2025-12-05 14:36:47</sys_created_on>
+        <sys_db_object display_value="" name="sys_dictionary">sys_dictionary</sys_db_object>
+        <sys_id>0453a43c017f45f58759732bc9944f99</sys_id>
+        <sys_metadata>03a304c7eba1b2d04870fc4dbad0cd0c</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Credit Inquiries (last 6m)</sys_name>
+        <sys_package display_value="CLV Maximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+        <sys_parent display_value="">fea3c0c7eba1b2d04870fc4dbad0cd68</sys_parent>
+        <sys_policy/>
+        <sys_scope display_value="CLV Maximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope>
+        <sys_scope_delete display_value="">2613f5e5d7d5468c9bd0db120e6922c4</sys_scope_delete>
+        <sys_update_name>sys_dictionary_x_hete_clvmaximi_0_1764945170727_u_credit_inquiries__last_6m_</sys_update_name>
+        <sys_update_version display_value="sys_dictionary_x_hete_clvmaximi_0_1764945170727_u_credit_inquiries__last_6m_">57a304c7eba1b2d04870fc4dbad0cd8d</sys_update_version>
+        <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+        <sys_updated_on>2025-12-05 14:36:47</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

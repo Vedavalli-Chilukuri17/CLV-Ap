@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_package_dependency_m2m">
+    <sys_package_dependency_m2m action="INSERT_OR_UPDATE">
+        <dependency display_value="System Import Sets" source="com.glide.system_import_set">8d9652c26830221008dd73179b41131e</dependency>
+        <min_version>1.0.0</min_version>
+        <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+        <sys_created_on>2025-12-05 14:33:09</sys_created_on>
+        <sys_id>0ba304c7eba1b2d04870fc4dbad0cd41</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_package display_value="CLV Maximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+        <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+        <sys_updated_on>2025-12-05 14:33:09</sys_updated_on>
+    </sys_package_dependency_m2m>
+</record_update>

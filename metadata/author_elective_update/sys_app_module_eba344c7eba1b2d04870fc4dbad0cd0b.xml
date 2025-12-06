@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="DELETE">
+        <active>true</active>
+        <application display_value="System Import Sets">import_sets</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>LIST</link_type>
+        <map_page/>
+        <mobile_title>Clvmaximi 0 1764945170727</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name>x_hete_clvmaximi_0_1764945170727</name>
+        <order>1100</order>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <require_confirmation>true</require_confirmation>
+        <roles/>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+        <sys_created_on>2025-12-05 14:33:11</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>eba344c7eba1b2d04870fc4dbad0cd0b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Clvmaximi 0 1764945170727</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="CLVMaximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="CLVMaximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope>
+        <sys_update_name>sys_app_module_eba344c7eba1b2d04870fc4dbad0cd0b</sys_update_name>
+        <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+        <sys_updated_on>2025-12-05 14:33:11</sys_updated_on>
+        <timeline_page/>
+        <title>Clvmaximi 0 1764945170727</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="CLV Maximization">2a21c44feb61b2d04870fc4dbad0cdc6</application>
+        <file_path/>
+        <instance_id>19d9a8401b3bf11419254089bd4bcbcc</instance_id>
+        <instance_name>ven06937</instance_name>
+        <name>sys_app_module_eba344c7eba1b2d04870fc4dbad0cd0b</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module"><sys_app_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="System Import Sets">import_sets</application><assessment/><device_type/><filter/><hint/><homepage/><image/><link_type>LIST</link_type><map_page/><mobile_title>Clvmaximi 0 1764945170727</mobile_title><mobile_view_name>Mobile</mobile_view_name><name>x_hete_clvmaximi_0_1764945170727</name><order>1100</order><override_menu_roles>false</override_menu_roles><query/><report/><require_confirmation>true</require_confirmation><roles/><sys_class_name>sys_app_module</sys_class_name><sys_created_by>InderpalS@hexaware.com</sys_created_by><sys_created_on>2025-12-05 14:33:11</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>eba344c7eba1b2d04870fc4dbad0cd0b</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Clvmaximi 0 1764945170727</sys_name><sys_overrides/><sys_package display_value="CLVMaximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package><sys_policy/><sys_scope display_value="CLVMaximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope><sys_update_name>sys_app_module_eba344c7eba1b2d04870fc4dbad0cd0b</sys_update_name><sys_updated_by>InderpalS@hexaware.com</sys_updated_by><sys_updated_on>2025-12-05 14:33:11</sys_updated_on><timeline_page/><title>Clvmaximi 0 1764945170727</title><uncancelable>false</uncancelable><view_name/><window_name/></sys_app_module></record_update>]]></payload>
+        <payload_hash>250215671</payload_hash>
+        <record_name>Clvmaximi 0 1764945170727</record_name>
+        <reverted_from/>
+        <source>2a21c44feb61b2d04870fc4dbad0cdc9</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+        <sys_created_on>2025-12-05 14:33:11</sys_created_on>
+        <sys_id>afa344c7eba1b2d04870fc4dbad0cd0e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19aeeee60f90000001</sys_recorded_at>
+        <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+        <sys_updated_on>2025-12-05 14:33:11</sys_updated_on>
+        <type>Module</type>
+        <update_guid>63a344c751a1b2d02910b92f6637b40e</update_guid>
+        <update_guid_history>63a344c751a1b2d02910b92f6637b40e:250215671</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="Clvmaximi 0 1764945170727">a7744c4beba1b2d04870fc4dbad0cd5e</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+        <sys_created_on>2025-12-05 14:36:43</sys_created_on>
+        <sys_db_object display_value="" name="sys_app_module">sys_app_module</sys_db_object>
+        <sys_id>46d7e7eff0a244eba6f76d33c8d8ee71</sys_id>
+        <sys_metadata>eba344c7eba1b2d04870fc4dbad0cd0b</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Clvmaximi 0 1764945170727</sys_name>
+        <sys_package display_value="CLV Maximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="CLV Maximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope>
+        <sys_scope_delete display_value="">2613f5e5d7d5468c9bd0db120e6922c4</sys_scope_delete>
+        <sys_update_name>sys_app_module_eba344c7eba1b2d04870fc4dbad0cd0b</sys_update_name>
+        <sys_update_version display_value="sys_app_module_eba344c7eba1b2d04870fc4dbad0cd0b">afa344c7eba1b2d04870fc4dbad0cd0e</sys_update_version>
+        <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+        <sys_updated_on>2025-12-05 14:36:43</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

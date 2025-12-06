@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="credit_utilization_percent" label="Credit utilization Percent" language="en" table="x_hete_clvmaximi_0_policy_holder">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>credit_utilization_percent</element>
+            <help/>
+            <hint/>
+            <label>Credit utilization Percent</label>
+            <language>en</language>
+            <name>x_hete_clvmaximi_0_policy_holder</name>
+            <plural>Credit utilization Percents</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:30</sys_created_on>
+            <sys_id>0074084beba1b2d04870fc4dbad0cd1a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Credit utilization Percent</sys_name>
+            <sys_package display_value="CLV Maximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="CLV Maximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope>
+            <sys_update_name>sys_documentation_x_hete_clvmaximi_0_policy_holder_credit_utilization_percent_en</sys_update_name>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:30</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

@@ -1,0 +1,5 @@
+Guidelines to be followed
+----------------------------
+1. Build agent should not create any new tables, fields or modify any fields.
+2. It should not create any demo data.
+3. It should always use the data present in the tables to show any analytics or KPIs unless there is no data within the tables for those KPIs.

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="risk_level" table="x_hete_clvmaximi_0_policy_holder" version="3">
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>risk_level</element>
+            <name>x_hete_clvmaximi_0_policy_holder</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:35</sys_created_on>
+            <sys_id>9174484beba1b2d04870fc4dbad0cdef</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>risk_level</sys_name>
+            <sys_package display_value="CLV Maximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="CLV Maximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope>
+            <sys_update_name>sys_choice_x_hete_clvmaximi_0_policy_holder_risk_level</sys_update_name>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:35</sys_updated_on>
+        </sys_choice_set>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>risk_level</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>High</label>
+            <language>en</language>
+            <name>x_hete_clvmaximi_0_policy_holder</name>
+            <sequence/>
+            <synonyms/>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:35</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>d574484beba1b2d04870fc4dbad0cdf5</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:35</sys_updated_on>
+            <value>high</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>risk_level</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Low</label>
+            <language>en</language>
+            <name>x_hete_clvmaximi_0_policy_holder</name>
+            <sequence/>
+            <synonyms/>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:35</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>1d74484beba1b2d04870fc4dbad0cdee</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:35</sys_updated_on>
+            <value>low</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>risk_level</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Medium</label>
+            <language>en</language>
+            <name>x_hete_clvmaximi_0_policy_holder</name>
+            <sequence/>
+            <synonyms/>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:35</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>d174484beba1b2d04870fc4dbad0cdf2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:35</sys_updated_on>
+            <value>medium</value>
+        </sys_choice>
+    </sys_choice>
+</record_update>

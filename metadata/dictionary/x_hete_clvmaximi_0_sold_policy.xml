@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="ae25cccbeba1b2d04870fc4dbad0cd7a" label="Sold Policy" max_length="40" name="x_hete_clvmaximi_0_sold_policy" type="collection">
+        <element label="Claims Count" max_length="40" name="claims_count" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Effective Date" max_length="40" name="effective_date" type="glide_date"/>
+        <element attributes="edge_encryption_enabled=true" label="Payment Frequency" max_length="40" name="payment_frequency" type="string"/>
+        <element attributes="encode_utf8=false" label="PolicyHolderID" max_length="32" name="policyholderid" reference="x_hete_clvmaximi_0_policy_holder" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="PolicyID" max_length="40" name="policyid" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="PolicyNumber" max_length="40" name="policynumber" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Policy Type" max_length="40" name="policy_type" type="string"/>
+        <element label="Policy Value" max_length="40" name="policy_value" type="integer"/>
+        <element label="Premium Amount" max_length="40" name="premium_amount" type="integer"/>
+        <element label="Premium (Annual)" max_length="40" name="premium_annual" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Renewal Date" max_length="40" name="renewal_date" type="glide_date"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="Status" max_length="40" name="status" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Active" value="active"/>
+                <element inactive_on_update="false" label="Expired" value="expired"/>
+                <element inactive_on_update="false" label="Renewed" value="renewed"/>
+            </choice>
+        </element>
+        <element label="Tenure (in months)" max_length="40" name="tenure_in_months" type="integer"/>
+        <index name="index">
+            <element name="policyholderid"/>
+        </index>
+    </element>
+</database>

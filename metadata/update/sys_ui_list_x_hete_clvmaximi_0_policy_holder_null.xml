@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="x_hete_clvmaximi_0_policy_holder" version="2" view="">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>policyholder_id</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>31848487eba1b2d04870fc4dbad0cd15</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>first_name</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>39848487eba1b2d04870fc4dbad0cd15</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>last_name</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3d848487eba1b2d04870fc4dbad0cd15</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>location</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>3</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>31848487eba1b2d04870fc4dbad0cd16</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>clv_score</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>35848487eba1b2d04870fc4dbad0cd16</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>churn_risk</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>39848487eba1b2d04870fc4dbad0cd16</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>clv</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>6</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3d848487eba1b2d04870fc4dbad0cd16</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>tier</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>7</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>31848487eba1b2d04870fc4dbad0cd17</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>risk_level</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>8</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>35848487eba1b2d04870fc4dbad0cd17</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>missing_coverage</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>9</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>39848487eba1b2d04870fc4dbad0cd17</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>age</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>10</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3d848487eba1b2d04870fc4dbad0cd17</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>tenure_months</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>11</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>31848487eba1b2d04870fc4dbad0cd18</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>email</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>12</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>35848487eba1b2d04870fc4dbad0cd18</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>phone</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>13</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>39848487eba1b2d04870fc4dbad0cd18</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>preferred_channel</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>14</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3d848487eba1b2d04870fc4dbad0cd18</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>website_visits_30_days</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>15</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>31848487eba1b2d04870fc4dbad0cd19</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>app_sessions_30_days</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>16</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>35848487eba1b2d04870fc4dbad0cd19</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>quote_views</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>17</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>39848487eba1b2d04870fc4dbad0cd19</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>abandoned_journeys</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>18</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3d848487eba1b2d04870fc4dbad0cd19</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>avg_session_time_min</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>19</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>31848487eba1b2d04870fc4dbad0cd1a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>credit_score</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>20</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>35848487eba1b2d04870fc4dbad0cd1a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>delinquency_12m</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>21</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>39848487eba1b2d04870fc4dbad0cd1a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>credit_utilization_percent</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>22</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3d848487eba1b2d04870fc4dbad0cd1a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>number_of_open_accounts</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>23</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>31848487eba1b2d04870fc4dbad0cd1b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>number_of_closed_accounts</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>24</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3984808beba1b2d04870fc4dbad0cd8b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>credit_inquiries_last_6m</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>25</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3d84808beba1b2d04870fc4dbad0cd8b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>bankruptcies_flag</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>26</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3184808beba1b2d04870fc4dbad0cd8c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>number_of_engagements</element>
+            <list_id display_value="x_hete_clvmaximi_0_policy_holder" element="NULL" name="x_hete_clvmaximi_0_policy_holder" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">bd848487eba1b2d04870fc4dbad0cd13</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>27</position>
+            <sum>false</sum>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_id>3584808beba1b2d04870fc4dbad0cd8c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>x_hete_clvmaximi_0_policy_holder</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:53</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>bd848487eba1b2d04870fc4dbad0cd13</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_hete_clvmaximi_0_policy_holder</sys_name>
+            <sys_package display_value="CLV Maximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="CLV Maximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope>
+            <sys_update_name>sys_ui_list_x_hete_clvmaximi_0_policy_holder_null</sys_update_name>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:53</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

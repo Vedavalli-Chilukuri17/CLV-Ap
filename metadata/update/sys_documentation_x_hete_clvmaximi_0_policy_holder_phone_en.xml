@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="phone" label="Phone" language="en" table="x_hete_clvmaximi_0_policy_holder">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>phone</element>
+            <help/>
+            <hint/>
+            <label>Phone</label>
+            <language>en</language>
+            <name>x_hete_clvmaximi_0_policy_holder</name>
+            <plural>Phones</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>InderpalS@hexaware.com</sys_created_by>
+            <sys_created_on>2025-12-05 14:36:30</sys_created_on>
+            <sys_id>9874084beba1b2d04870fc4dbad0cd44</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Phone</sys_name>
+            <sys_package display_value="CLV Maximization" source="x_hete_clvmaximi_0">2a21c44feb61b2d04870fc4dbad0cdc6</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="CLV Maximization">2a21c44feb61b2d04870fc4dbad0cdc6</sys_scope>
+            <sys_update_name>sys_documentation_x_hete_clvmaximi_0_policy_holder_phone_en</sys_update_name>
+            <sys_updated_by>InderpalS@hexaware.com</sys_updated_by>
+            <sys_updated_on>2025-12-05 14:36:30</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

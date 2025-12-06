@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="7364c44beba1b2d04870fc4dbad0cd91" label="Policy Holder" max_length="40" name="x_hete_clvmaximi_0_policy_holder" type="collection">
+        <element label="Abandoned Journeys" max_length="40" name="abandoned_journeys" type="integer"/>
+        <element label="Age" max_length="40" name="age" type="integer"/>
+        <element label="App Sessions (30 Days)" max_length="40" name="app_sessions_30_days" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Avg Session Time (min)" max_length="40" name="avg_session_time_min" type="string"/>
+        <element label="Bankruptcies flag" max_length="40" name="bankruptcies_flag" type="boolean"/>
+        <element label="Churn Risk (%)" max_length="38" name="churn_risk" type="percent_complete"/>
+        <element label="CLV ($)" max_length="40" name="clv" type="integer"/>
+        <element label="CLV Score" max_length="40" name="clv_score" type="integer"/>
+        <element label="Credit Inquiries (last 6m)" max_length="40" name="credit_inquiries_last_6m" type="integer"/>
+        <element label="Credit score" max_length="40" name="credit_score" type="integer"/>
+        <element label="Credit utilization Percent" max_length="38" name="credit_utilization_percent" type="percent_complete"/>
+        <element label="Delinquency 12m" max_length="40" name="delinquency_12m" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Email" max_length="40" name="email" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="First Name" max_length="40" name="first_name" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Last Name" max_length="40" name="last_name" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Location" max_length="40" name="location" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Missing Coverage" max_length="400" name="missing_coverage" type="string"/>
+        <element label="Number of closed accounts" max_length="40" name="number_of_closed_accounts" type="integer"/>
+        <element label="Number of Engagements" max_length="40" name="number_of_engagements" type="integer"/>
+        <element label="Number of open accounts" max_length="40" name="number_of_open_accounts" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Phone" max_length="40" name="phone" type="string"/>
+        <element attributes="edge_encryption_enabled=true" display="true" label="PolicyHolder ID" max_length="40" name="policyholder_id" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Preferred Channel" max_length="40" name="preferred_channel" type="string"/>
+        <element label="Quote Views" max_length="40" name="quote_views" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="Risk Level" max_length="40" name="risk_level" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="High" value="high"/>
+                <element inactive_on_update="false" label="Low" value="low"/>
+                <element inactive_on_update="false" label="Medium" value="medium"/>
+            </choice>
+        </element>
+        <element label="Tenure (Months)" max_length="40" name="tenure_months" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="Tier" max_length="40" name="tier" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Bronze" value="bronze"/>
+                <element inactive_on_update="false" label="Gold" value="gold"/>
+                <element inactive_on_update="false" label="Premium" value="premium"/>
+                <element inactive_on_update="false" label="Silver" value="silver"/>
+                <element inactive_on_update="false" label="Platinum" sequence="0" value="Platinum"/>
+            </choice>
+        </element>
+        <element label="Website Visits (30 Days)" max_length="40" name="website_visits_30_days" type="integer"/>
+    </element>
+</database>
