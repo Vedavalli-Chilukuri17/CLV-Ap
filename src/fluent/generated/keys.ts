@@ -21,6 +21,10 @@ declare global {
                         table: 'sys_app_application'
                         id: '86268ccfeba1b2d04870fc4dbad0cd91'
                     }
+                    'app.css': {
+                        table: 'sys_ux_theme_asset'
+                        id: 'd637cdb0b3e542e1be59f6109de14eb4'
+                    }
                     bom_json: {
                         table: 'sys_module'
                         id: '0b1c09837e164610a8f78009f5e0c2f0'
