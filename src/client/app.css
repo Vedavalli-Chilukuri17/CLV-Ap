@@ -12,6 +12,100 @@ body {
   line-height: 1.6;
 }
 
+/* New App Container Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #1e3a5f 0%, #2c5282 100%);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  height: 100vh;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 25px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-title {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.logo-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 5px;
+  font-weight: 400;
+}
+
+.nav-menu {
+  padding: 20px 0;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 15px 25px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(5px);
+}
+
+.nav-link.active {
+  background: rgba(66, 153, 225, 0.3);
+  color: #4299e1;
+  border-right: 3px solid #4299e1;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  transition: all 0.3s ease;
+}
+
+.dashboard-content {
+  padding: 20px;
+}
+
+/* Updated Dashboard Container for New Layout */
 .dashboard-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -61,6 +155,18 @@ body {
 .refresh-button:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: translateY(-1px);
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 20px 0;
+}
+
+.tab-description {
+  font-size: 16px;
+  color: #718096;
+  margin-bottom: 30px;
+  line-height: 1.6;
 }
 
 /* Debug Panel */
@@ -356,7 +462,7 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .dashboard-container {
+  .dashboard-content {
     padding: 16px;
   }
   
@@ -367,6 +473,14 @@ body {
 }
 
 @media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
   .dashboard-title {
     font-size: 24px;
   }
@@ -396,7 +510,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  .dashboard-container {
+  .dashboard-content {
     padding: 12px;
   }
   
