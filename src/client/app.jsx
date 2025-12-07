@@ -4,6 +4,7 @@ import KPICard from './components/KPICard.jsx';
 import CustomerIntelligence from './components/CustomerIntelligence.jsx';
 import RenewalManagement from './components/RenewalManagement.jsx';
 import './app.css';
+import './data-ingestion.css';
 
 export default function App() {
   const service = useMemo(() => new DashboardService(), []);
@@ -50,17 +51,18 @@ export default function App() {
 
   const [isGeneratingContent, setIsGeneratingContent] = useState(false);
 
-  // Enhanced Data Ingestion state
+  // Data Ingestion State - Updated to match new comprehensive design
   const [ingestionState, setIngestionState] = useState({
-    uploadedFile: null,
-    uploadProgress: 0,
-    isUploading: false,
-    selectedSourceType: '',
+    selectedFile: null,
+    uploadStatus: 'idle',
+    sourceType: '',
+    searchTerm: '',
+    statusFilter: 'All Status',
     filePreview: null,
     quickAnalytics: null,
     validationStatus: null,
     isValidating: false,
-    
+
     // Summary Metrics (Section 1)
     summaryMetrics: {
       totalDatasets: 47,
@@ -68,89 +70,7 @@ export default function App() {
       validatedDatasets: 42,
       failedValidations: 5
     },
-    
-    // Recent Data Uploads (Section 3) - Enhanced with more details
-    recentUploads: [
-      {
-        id: '1',
-        fileName: 'External Data 1',
-        sourceType: 'External',
-        size: '5MB',
-        recordCount: 1000,
-        uploadedTime: '2023-09-01 10:00',
-        status: 'Validated',
-        quality: 98.5,
-        columns: 6,
-        lastValidated: '2023-09-01 10:15',
-        validationErrors: 0
-      },
-      {
-        id: '2', 
-        fileName: 'Customer File',
-        sourceType: 'Internal',
-        size: '3MB',
-        recordCount: 750,
-        uploadedTime: '2023-09-02 14:30',
-        status: 'Validated',
-        quality: 96.2,
-        columns: 8,
-        lastValidated: '2023-09-02 14:45',
-        validationErrors: 0
-      },
-      {
-        id: '3',
-        fileName: 'Campaign Data',
-        sourceType: 'External',
-        size: '4MB',
-        recordCount: 900,
-        uploadedTime: '2023-09-03 09:45',
-        status: 'Pending',
-        quality: 89.1,
-        columns: 12,
-        lastValidated: null,
-        validationErrors: null
-      },
-      {
-        id: '4',
-        fileName: 'CRM_Integration_Data.csv',
-        sourceType: 'CRM',
-        size: '7.8MB',
-        recordCount: 1200,
-        uploadedTime: '2023-09-04 16:20',
-        status: 'Validated',
-        quality: 94.7,
-        columns: 10,
-        lastValidated: '2023-09-04 16:35',
-        validationErrors: 0
-      },
-      {
-        id: '5',
-        fileName: 'External_Vendor_Feed.xlsx',
-        sourceType: 'External',
-        size: '2.3MB',
-        recordCount: 450,
-        uploadedTime: '2023-09-05 14:10',
-        status: 'Failed',
-        quality: 76.3,
-        columns: 5,
-        lastValidated: '2023-09-05 14:25',
-        validationErrors: 12
-      },
-      {
-        id: '6',
-        fileName: 'Risk_Assessment_Data.json',
-        sourceType: 'Internal',
-        size: '6.1MB',
-        recordCount: 880,
-        uploadedTime: '2023-09-06 11:35',
-        status: 'Validated',
-        quality: 97.8,
-        columns: 9,
-        lastValidated: '2023-09-06 11:50',
-        validationErrors: 0
-      }
-    ],
-    
+
     // Footer Metrics (Section 4)
     footerMetrics: {
       dataQualityScore: 94.7,
@@ -159,15 +79,7 @@ export default function App() {
       qualityTrend: '+2.3%',
       recordsTrend: '+156,332',
       syncStatus: 'healthy'
-    },
-    
-    // Table state
-    currentPage: 1,
-    itemsPerPage: 6,
-    sortBy: 'uploadedTime',
-    sortDirection: 'desc',
-    filterStatus: 'all',
-    searchQuery: ''
+    }
   });
 
   // File input ref for data ingestion
@@ -477,60 +389,126 @@ export default function App() {
     }
   };
 
-  // Enhanced Data Ingestion Functions
-  const handleFileUpload = (files) => {
-    const file = files[0];
-    if (!file) return;
-
-    // Validate file type
-    const allowedTypes = ['.csv', '.xlsx', '.json'];
-    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-    if (!allowedTypes.includes(fileExtension)) {
-      alert('Please upload a valid file format: .CSV, .XLSX, or .JSON');
-      return;
+  // Mock files data for ingestion
+  const mockFiles = [
+    {
+      id: 1,
+      name: 'External Data 1',
+      sourceType: 'External',
+      size: '5MB',
+      recordCount: 1000,
+      uploadedTime: '2023-09-01 10:00',
+      status: 'validated',
+      statusText: '✅ Validated',
+      errors: 0,
+      quality: 98.5,
+      columns: 6
+    },
+    {
+      id: 2,
+      name: 'Customer File',
+      sourceType: 'Internal',
+      size: '3MB',
+      recordCount: 750,
+      uploadedTime: '2023-09-02 14:30',
+      status: 'validated',
+      statusText: '✅ Validated',
+      errors: 0,
+      quality: 96.2,
+      columns: 8
+    },
+    {
+      id: 3,
+      name: 'Campaign Data',
+      sourceType: 'External',
+      size: '4MB',
+      recordCount: 900,
+      uploadedTime: '2023-09-03 09:45',
+      status: 'pending',
+      statusText: '⏳ Pending',
+      errors: 0,
+      quality: 89.1,
+      columns: 12
+    },
+    {
+      id: 4,
+      name: 'CRM_Integration_Data.csv',
+      sourceType: 'CRM',
+      size: '7.8MB',
+      recordCount: 1200,
+      uploadedTime: '2023-09-04 16:20',
+      status: 'validated',
+      statusText: '✅ Validated',
+      errors: 0,
+      quality: 94.7,
+      columns: 10
+    },
+    {
+      id: 5,
+      name: 'External_Vendor_Feed.xlsx',
+      sourceType: 'External',
+      size: '2.3MB',
+      recordCount: 450,
+      uploadedTime: '2023-09-05 14:10',
+      status: 'failed',
+      statusText: '❌ Failed',
+      errors: 12,
+      quality: 76.3,
+      columns: 5
+    },
+    {
+      id: 6,
+      name: 'Risk_Assessment_Data.json',
+      sourceType: 'Internal',
+      size: '6.1MB',
+      recordCount: 880,
+      uploadedTime: '2023-09-06 11:35',
+      status: 'validated',
+      statusText: '✅ Validated',
+      errors: 0,
+      quality: 97.8,
+      columns: 9
     }
+  ];
 
-    // Validate file size (100MB max)
-    const maxSize = 100 * 1024 * 1024; // 100MB in bytes
-    if (file.size > maxSize) {
-      alert('File size exceeds 100MB limit. Please upload a smaller file.');
-      return;
+  // Data ingestion functions
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      const allowedTypes = ['.csv', '.xlsx', '.json'];
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+      if (!allowedTypes.includes(fileExtension)) {
+        alert('Please upload a valid file format: .CSV, .XLSX, or .JSON');
+        return;
+      }
+
+      // Validate file size (100MB max)
+      const maxSize = 100 * 1024 * 1024; // 100MB in bytes
+      if (file.size > maxSize) {
+        alert('File size exceeds 100MB limit. Please upload a smaller file.');
+        return;
+      }
+
+      setIngestionState(prev => ({
+        ...prev,
+        selectedFile: file,
+        uploadStatus: 'uploading',
+        filePreview: null,
+        quickAnalytics: null,
+        validationStatus: null
+      }));
+      
+      // Simulate upload process
+      setTimeout(() => {
+        setIngestionState(prev => ({...prev, uploadStatus: 'completed'}));
+        generateFilePreview(file);
+      }, 2000);
     }
-
-    setIngestionState(prev => ({
-      ...prev,
-      uploadedFile: file,
-      isUploading: true,
-      uploadProgress: 0,
-      filePreview: null,
-      quickAnalytics: null,
-      validationStatus: null
-    }));
-
-    // Simulate upload progress
-    const progressInterval = setInterval(() => {
-      setIngestionState(prev => {
-        const newProgress = prev.uploadProgress + 10;
-        if (newProgress >= 100) {
-          clearInterval(progressInterval);
-          // Generate mock preview and analytics after upload
-          generateFilePreview(file);
-          return {
-            ...prev,
-            uploadProgress: 100,
-            isUploading: false
-          };
-        }
-        return {
-          ...prev,
-          uploadProgress: newProgress
-        };
-      });
-    }, 200);
   };
 
   const generateFilePreview = (file) => {
-    // Mock data preview based on file type
+    // Mock data preview
     const mockPreviewData = [
       ['Customer ID', 'Name', 'Email', 'CLV', 'Tier', 'Risk Level'],
       ['C001', 'John Smith', 'john@email.com', '$45,000', 'Gold', 'Low'],
@@ -563,7 +541,7 @@ export default function App() {
       ...prev,
       isValidating: true
     }));
-
+    
     // Simulate validation process
     setTimeout(() => {
       const validationResult = {
@@ -580,112 +558,44 @@ export default function App() {
     }, 3000);
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
+  const handleDragOver = (event) => {
+    event.preventDefault();
   };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    handleFileUpload(files);
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      handleFileUpload({ target: { files: [file] } });
+    }
   };
 
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
+  const filteredFiles = mockFiles.filter(file => {
+    const matchesSearch = file.name.toLowerCase().includes(ingestionState.searchTerm.toLowerCase());
+    const matchesStatus = ingestionState.statusFilter === 'All Status' || 
+      (ingestionState.statusFilter === 'Validated' && file.status === 'validated') ||
+      (ingestionState.statusFilter === 'Pending' && file.status === 'pending') ||
+      (ingestionState.statusFilter === 'Failed' && file.status === 'failed');
+    return matchesSearch && matchesStatus;
+  });
+
+  const viewFile = (file) => {
+    alert(`Viewing details for: ${file.name}\n\nSource: ${file.sourceType}\nSize: ${file.size}\nRecords: ${file.recordCount}\nQuality: ${file.quality}%\nColumns: ${file.columns}\nStatus: ${file.statusText}\nLast Updated: ${file.uploadedTime}`);
   };
 
-  const deleteUpload = (uploadId) => {
-    const confirmed = confirm('Are you sure you want to delete this upload?');
+  const revalidateFile = (file) => {
+    alert(`Initiating revalidation for: ${file.name}\n\nValidation workflow will be triggered and results will be updated in real-time.`);
+  };
+
+  const deleteFile = (fileId) => {
+    const confirmed = confirm('Are you sure you want to delete this dataset?');
     if (confirmed) {
-      setIngestionState(prev => ({
-        ...prev,
-        recentUploads: prev.recentUploads.filter(upload => upload.id !== uploadId)
-      }));
+      alert(`Dataset ID ${fileId} has been marked for deletion.`);
     }
   };
 
-  const viewUpload = (upload) => {
-    alert(`Viewing details for: ${upload.fileName}\n\nSource: ${upload.sourceType}\nSize: ${upload.size}\nRecords: ${upload.recordCount}\nQuality: ${upload.quality}%\nColumns: ${upload.columns}\nStatus: ${upload.status}\nLast Validated: ${upload.lastValidated || 'Never'}\nValidation Errors: ${upload.validationErrors || 0}`);
-  };
-
-  const revalidateUpload = (uploadId) => {
-    alert(`Initiating revalidation for dataset ID: ${uploadId}\n\nValidation workflow will be triggered and results will be updated in real-time.`);
-  };
-
-  // Table functions
-  const handleSort = (column) => {
-    setIngestionState(prev => ({
-      ...prev,
-      sortBy: column,
-      sortDirection: prev.sortBy === column && prev.sortDirection === 'asc' ? 'desc' : 'asc'
-    }));
-  };
-
-  const handleFilter = (status) => {
-    setIngestionState(prev => ({
-      ...prev,
-      filterStatus: status,
-      currentPage: 1
-    }));
-  };
-
-  const handleSearch = (query) => {
-    setIngestionState(prev => ({
-      ...prev,
-      searchQuery: query,
-      currentPage: 1
-    }));
-  };
-
-  // Filter and sort uploads
-  const getFilteredUploads = () => {
-    let filtered = [...ingestionState.recentUploads];
-    
-    // Apply status filter
-    if (ingestionState.filterStatus !== 'all') {
-      filtered = filtered.filter(upload => 
-        upload.status.toLowerCase() === ingestionState.filterStatus.toLowerCase()
-      );
-    }
-    
-    // Apply search filter
-    if (ingestionState.searchQuery) {
-      filtered = filtered.filter(upload => 
-        upload.fileName.toLowerCase().includes(ingestionState.searchQuery.toLowerCase()) ||
-        upload.sourceType.toLowerCase().includes(ingestionState.searchQuery.toLowerCase())
-      );
-    }
-    
-    // Apply sorting
-    filtered.sort((a, b) => {
-      let aVal = a[ingestionState.sortBy];
-      let bVal = b[ingestionState.sortBy];
-      
-      if (ingestionState.sortBy === 'uploadedTime') {
-        aVal = new Date(aVal);
-        bVal = new Date(bVal);
-      } else if (ingestionState.sortBy === 'recordCount') {
-        aVal = Number(aVal);
-        bVal = Number(bVal);
-      }
-      
-      if (aVal < bVal) return ingestionState.sortDirection === 'asc' ? -1 : 1;
-      if (aVal > bVal) return ingestionState.sortDirection === 'asc' ? 1 : -1;
-      return 0;
-    });
-    
-    return filtered;
-  };
-
-  // Pagination
-  const getPaginatedUploads = () => {
-    const filtered = getFilteredUploads();
-    const startIndex = (ingestionState.currentPage - 1) * ingestionState.itemsPerPage;
-    return filtered.slice(startIndex, startIndex + ingestionState.itemsPerPage);
-  };
-
-  const getTotalPages = () => {
-    return Math.ceil(getFilteredUploads().length / ingestionState.itemsPerPage);
+  const drillDownMetric = (metricName) => {
+    alert(`Drilling down into ${metricName} details:\n\n• View detailed audit logs\n• Filter by date range\n• Export data for analysis\n• Configure alerts and notifications`);
   };
 
   // Original Dashboard Content Component
@@ -1187,208 +1097,202 @@ export default function App() {
     </div>
   );
 
-  // Enhanced Data Ingestion Content Component - SIMPLIFIED VERSION WITHOUT PROBLEMATIC WIDGET
+  // NEW: Comprehensive Data Ingestion Content Component
   const IngestionContent = () => (
-    <div className="data-ingestion-comprehensive">
-      <h2 className="section-title">📥 Data Ingestion & Management</h2>
-      <p className="tab-description">
-        Modular, dynamic interface supporting multi-source file uploads, validation workflows, preview panels, 
-        ingestion analytics, and audit tracking with real-time data from ServiceNow built-in tables.
-      </p>
+    <div className="data-ingestion-container">
+      {/* User Identity Header */}
+      <div className="user-identity-header">
+        <div className="user-avatar">ET</div>
+        <div className="user-details">
+          <div className="user-name">Emma Thompson</div>
+          <div className="user-role">Data Analytics Manager</div>
+        </div>
+        <div className="last-sync">Last sync: {ingestionState.footerMetrics.lastSyncTime}</div>
+      </div>
 
-      {/* Section 1: Summary Metrics Panel (Top) - FLEXBOX LAYOUT */}
+      {/* Section 1: Summary Metrics Panel */}
       <div className="summary-metrics-section">
-        <h3 className="widget-section-title">📊 Summary Metrics Panel</h3>
-        <div className="summary-metrics-flexbox" style={{
-          display: 'flex',
-          gap: '25px',
-          flexWrap: 'wrap',
-          marginBottom: '30px'
-        }}>
-          <div style={{flex: '1', minWidth: '300px'}}>
-            <KPICard
-              title="Total Datasets"
-              value={ingestionState.summaryMetrics.totalDatasets.toString()}
-              subtitle="All uploaded datasets"
-              trend="📊 Click to drill-down"
-              icon="📁"
-              className={ingestionState.summaryMetrics.failedValidations > 0 ? 'has-anomaly' : ''}
-              onClick={() => alert('Drilling down to dataset-level details:\n\n• Active Datasets: 42\n• Archived Datasets: 5\n• Processing Queue: 2\n\nClick on individual datasets for detailed metadata and lineage information.')}
-            />
+        <h2 className="section-title">📊 Data Ingestion Overview</h2>
+        <div className="summary-metrics-grid">
+          <div className="metric-card total-datasets" onClick={() => drillDownMetric('Total Datasets')}>
+            <div className="metric-header">
+              <div className="metric-icon">📁</div>
+              <div className="metric-trend">↗️ +5 this week</div>
+            </div>
+            <div className="metric-value">{ingestionState.summaryMetrics.totalDatasets}</div>
+            <div className="metric-label">Total Datasets</div>
+            <div className="metric-subtitle">All uploaded datasets</div>
           </div>
-          
-          <div style={{flex: '1', minWidth: '300px'}}>
-            <KPICard
-              title="Viewed Datasets"
-              value={ingestionState.summaryMetrics.viewedDatasets.toString()}
-              subtitle="Datasets opened/reviewed"
-              trend="👁️ View dataset details"
-              icon="📋"
-              onClick={() => alert('Drilling down to viewed datasets:\n\n• Recently Viewed: 12\n• Frequently Accessed: 8\n• Pending Review: 18\n\nAccess detailed viewing logs and user activity tracking.')}
-            />
+
+          <div className="metric-card viewed-datasets" onClick={() => drillDownMetric('Viewed Datasets')}>
+            <div className="metric-header">
+              <div className="metric-icon">👁️</div>
+              <div className="metric-trend">📈 81% view rate</div>
+            </div>
+            <div className="metric-value">{ingestionState.summaryMetrics.viewedDatasets}</div>
+            <div className="metric-label">Viewed Datasets</div>
+            <div className="metric-subtitle">Opened/previewed files</div>
           </div>
-          
-          <div style={{flex: '1', minWidth: '300px'}}>
-            <KPICard
-              title="Validated Datasets"
-              value={ingestionState.summaryMetrics.validatedDatasets.toString()}
-              subtitle="Successfully validated"
-              trend={`${ingestionState.summaryMetrics.failedValidations} failures detected`}
-              trendDirection={ingestionState.summaryMetrics.failedValidations > 0 ? 'down' : 'up'}
-              icon="✅"
-              className={ingestionState.summaryMetrics.failedValidations > 0 ? 'has-anomaly' : ''}
-              onClick={() => alert(`Validation Summary:\n\n✅ Validated: ${ingestionState.summaryMetrics.validatedDatasets}\n❌ Failed: ${ingestionState.summaryMetrics.failedValidations}\n⏳ Pending: ${ingestionState.summaryMetrics.totalDatasets - ingestionState.summaryMetrics.validatedDatasets - ingestionState.summaryMetrics.failedValidations}\n\nClick for detailed validation logs and error analysis.`)}
-            />
+
+          <div className="metric-card validated-datasets" onClick={() => drillDownMetric('Validated Datasets')}>
+            <div className="metric-header">
+              <div className="metric-icon">✅</div>
+              <div className="metric-trend">🎯 89% success rate</div>
+            </div>
+            <div className="metric-value">{ingestionState.summaryMetrics.validatedDatasets}</div>
+            <div className="metric-label">Validated Datasets</div>
+            <div className="metric-subtitle">Successfully validated</div>
           </div>
+
+          {ingestionState.summaryMetrics.failedValidations > 0 && (
+            <div className="metric-card failed-validations anomaly" onClick={() => drillDownMetric('Failed Validations')}>
+              <div className="metric-header">
+                <div className="metric-icon">⚠️</div>
+                <div className="metric-trend">❗ Attention needed</div>
+              </div>
+              <div className="metric-value">{ingestionState.summaryMetrics.failedValidations}</div>
+              <div className="metric-label">Failed Validations</div>
+              <div className="metric-subtitle">Require review</div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Section 2: Upload & Validation Workflow */}
       <div className="upload-workflow-section">
-        <h3 className="widget-section-title">⚙️ Upload & Validation Workflow</h3>
+        <h2 className="section-title">📤 Upload & Validation Workflow</h2>
+        <p className="section-subtitle">Drag-and-drop upload interface with real-time validation and preview</p>
         
-        {/* Upload Interface */}
-        <div className="upload-interface-container">
-          <div className="upload-zone-widget">
-            <div className="widget-header">
-              <h4 className="widget-title">📤 Drag-and-Drop Upload Interface</h4>
-              <div className="refresh-indicator">🔄 Real-time status</div>
+        <div className="workflow-grid">
+          {/* Upload Interface */}
+          <div className="workflow-card upload-card">
+            <div className="card-header">
+              <h3 className="card-title">📁 Dataset Upload</h3>
             </div>
-            <div className="widget-content">
-              <div className="upload-controls-enhanced">
-                <div className="source-selector">
-                  <label className="form-label">Select Source Type</label>
-                  <select 
-                    className="form-control source-select-enhanced"
-                    value={ingestionState.selectedSourceType}
-                    onChange={(e) => setIngestionState(prev => ({...prev, selectedSourceType: e.target.value}))}
-                  >
-                    <option value="">Select Source Type...</option>
-                    <option value="external">External</option>
-                    <option value="crm">CRM</option>
-                    <option value="campaign">Campaign</option>
-                    <option value="internal">Internal</option>
-                  </select>
-                </div>
-                
-                <button className="btn btn-primary upload-btn-enhanced" onClick={triggerFileInput}>
-                  📁 Upload Dataset
-                </button>
+            <div className="card-content">
+              {/* Source Type Selection */}
+              <div className="form-group">
+                <label className="form-label">Select Source Type</label>
+                <select 
+                  className="form-select"
+                  value={ingestionState.sourceType}
+                  onChange={(e) => setIngestionState(prev => ({...prev, sourceType: e.target.value}))}
+                >
+                  <option value="">Select Source Type...</option>
+                  <option value="external">External</option>
+                  <option value="crm">CRM</option>
+                  <option value="campaign">Campaign</option>
+                  <option value="internal">Internal</option>
+                  <option value="api">API</option>
+                </select>
               </div>
-              
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".csv,.xlsx,.json"
-                onChange={(e) => handleFileUpload(Array.from(e.target.files))}
-                style={{ display: 'none' }}
-              />
-              
+
+              {/* Upload Area */}
               <div 
-                className={`upload-dropzone-enhanced ${ingestionState.isUploading ? 'uploading' : ''}`}
+                className="upload-drop-zone"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                onClick={triggerFileInput}
+                onClick={() => fileInputRef.current?.click()}
               >
-                <div className="dropzone-content">
-                  <div className="dropzone-icon">📁</div>
-                  <div className="dropzone-text">
-                    {ingestionState.isUploading ? 'Uploading...' : 'Drag & Drop files or click to upload'}
-                  </div>
-                  <div className="dropzone-formats">
-                    Supported: <strong>.CSV</strong>, <strong>.XLSX</strong>, <strong>.JSON</strong> (Max: <strong>100MB</strong>)
-                  </div>
-                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv,.xlsx,.json"
+                  onChange={handleFileUpload}
+                  style={{ display: 'none' }}
+                />
                 
-                {ingestionState.isUploading && (
-                  <div className="upload-progress">
+                {ingestionState.uploadStatus === 'idle' && (
+                  <div className="upload-content">
+                    <div className="upload-icon">📁</div>
+                    <div className="upload-text">Drag & Drop files or click to upload</div>
+                    <div className="upload-formats">Supported: .CSV, .XLSX, .JSON</div>
+                    <div className="upload-limit">Max file size: 100MB</div>
+                  </div>
+                )}
+                
+                {ingestionState.uploadStatus === 'uploading' && (
+                  <div className="upload-content">
+                    <div className="upload-icon spinning">⏳</div>
+                    <div className="upload-text">Uploading...</div>
+                    <div className="upload-filename">{ingestionState.selectedFile?.name}</div>
                     <div className="progress-bar">
-                      <div 
-                        className="progress-fill" 
-                        style={{ width: `${ingestionState.uploadProgress}%` }}
-                      ></div>
+                      <div className="progress-fill"></div>
                     </div>
-                    <div className="progress-text">{ingestionState.uploadProgress}%</div>
+                  </div>
+                )}
+                
+                {ingestionState.uploadStatus === 'completed' && (
+                  <div className="upload-content success">
+                    <div className="upload-icon">✅</div>
+                    <div className="upload-text">Upload Complete</div>
+                    <div className="upload-filename">{ingestionState.selectedFile?.name}</div>
+                    <button className="btn btn-primary" onClick={() => fileInputRef.current?.click()}>
+                      📁 Upload Another File
+                    </button>
                   </div>
                 )}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Preview, Analytics, and Validation Panels - FLEXBOX LAYOUT */}
-        <div className="workflow-panels-flexbox" style={{
-          display: 'flex',
-          gap: '25px',
-          flexWrap: 'wrap',
-          marginTop: '30px'
-        }}>
           {/* Data Preview Panel */}
-          <div className="workflow-panel" style={{flex: '1', minWidth: '350px'}}>
-            <div className="panel-header">
-              <h4 className="panel-title">📋 Data Preview Panel</h4>
+          <div className="workflow-card preview-card">
+            <div className="card-header">
+              <h3 className="card-title">📋 Data Preview Panel</h3>
+              <div className="card-subtitle">First 10 rows</div>
             </div>
-            <div className="panel-content">
+            <div className="card-content">
               {!ingestionState.filePreview ? (
                 <div className="empty-state">
                   <div className="empty-icon">📄</div>
-                  <p className="empty-message">No data preview available. Please upload a file to preview data.</p>
+                  <div className="empty-text">No data preview available. Please upload a file to preview data</div>
                 </div>
               ) : (
-                <div className="data-preview-enhanced">
-                  <div className="preview-header">First 10 rows preview:</div>
-                  <div className="preview-table-container">
-                    <table className="preview-table-enhanced">
-                      <thead>
-                        <tr>
-                          {ingestionState.filePreview[0]?.map((header, index) => (
-                            <th key={index}>{header}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {ingestionState.filePreview.slice(1, 11).map((row, index) => (
-                          <tr key={index}>
-                            {row.map((cell, cellIndex) => (
-                              <td key={cellIndex}>{cell}</td>
-                            ))}
-                          </tr>
+                <div className="preview-table-container">
+                  <div className="preview-table">
+                    {ingestionState.filePreview.map((row, rowIndex) => (
+                      <div key={rowIndex} className={`preview-row ${rowIndex === 0 ? 'header-row' : ''}`}>
+                        {row.map((cell, cellIndex) => (
+                          <div key={cellIndex} className="preview-cell">
+                            {cell}
+                          </div>
                         ))}
-                      </tbody>
-                    </table>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
             </div>
           </div>
+        </div>
 
+        {/* Analytics and Validation Row */}
+        <div className="workflow-grid">
           {/* Quick Analytics Panel */}
-          <div className="workflow-panel" style={{flex: '1', minWidth: '350px'}}>
-            <div className="panel-header">
-              <h4 className="panel-title">📈 Quick Analytics Panel</h4>
+          <div className="workflow-card analytics-card">
+            <div className="card-header">
+              <h3 className="card-title">📈 Quick Analytics Panel</h3>
             </div>
-            <div className="panel-content">
+            <div className="card-content">
               {!ingestionState.quickAnalytics ? (
                 <div className="empty-state">
                   <div className="empty-icon">📊</div>
-                  <p className="empty-message">Upload a file to view analytics</p>
+                  <div className="empty-text">Upload a file to view analytics</div>
                 </div>
               ) : (
-                <div className="analytics-stats-enhanced">
-                  <div className="stat-item-enhanced">
-                    <span className="stat-icon">📊</span>
-                    <span className="stat-label">Record Count:</span>
-                    <span className="stat-value">{ingestionState.quickAnalytics.recordCount.toLocaleString()}</span>
+                <div className="analytics-stats">
+                  <div className="stat-item">
+                    <div className="stat-label">Record Count</div>
+                    <div className="stat-value">{ingestionState.quickAnalytics.recordCount.toLocaleString()}</div>
                   </div>
-                  <div className="stat-item-enhanced">
-                    <span className="stat-icon">🗂️</span>
-                    <span className="stat-label">Column Count:</span>
-                    <span className="stat-value">{ingestionState.quickAnalytics.columnCount}</span>
+                  <div className="stat-item">
+                    <div className="stat-label">Column Count</div>
+                    <div className="stat-value">{ingestionState.quickAnalytics.columnCount}</div>
                   </div>
-                  <div className="stat-item-enhanced">
-                    <span className="stat-icon">⚠️</span>
-                    <span className="stat-label">Null Values:</span>
-                    <span className="stat-value">{ingestionState.quickAnalytics.nullValues}</span>
+                  <div className="stat-item">
+                    <div className="stat-label">Null Values</div>
+                    <div className="stat-value">{ingestionState.quickAnalytics.nullValues}</div>
                   </div>
                 </div>
               )}
@@ -1396,51 +1300,53 @@ export default function App() {
           </div>
 
           {/* Validation Panel */}
-          <div className="workflow-panel" style={{flex: '1', minWidth: '350px'}}>
-            <div className="panel-header">
-              <h4 className="panel-title">✅ Validation Panel</h4>
+          <div className="workflow-card validation-card">
+            <div className="card-header">
+              <h3 className="card-title">✅ Validation Panel</h3>
             </div>
-            <div className="panel-content">
-              {!ingestionState.validationStatus ? (
-                <div className="validation-pending">
-                  <div className="validation-icon">⏳</div>
-                  <p className="validation-message">
-                    Validation result not found. Uploaded file has not been processed with validation rules.
-                  </p>
-                  <div className="validation-actions">
-                    <button 
-                      className="btn btn-primary btn-sm"
-                      onClick={runValidation}
-                      disabled={!ingestionState.uploadedFile || ingestionState.isValidating}
-                    >
-                      {ingestionState.isValidating ? '⏳ Running Validation...' : '🔍 Run Validation'}
-                    </button>
-                    <button 
-                      className="btn btn-secondary btn-sm"
-                      disabled={!ingestionState.uploadedFile}
-                    >
-                      🔄 Reprocess
-                    </button>
-                  </div>
+            <div className="card-content">
+              {ingestionState.isValidating ? (
+                <div className="validating-state">
+                  <div className="validating-icon spinning">⏳</div>
+                  <div className="validating-text">Running validation rules...</div>
+                </div>
+              ) : !ingestionState.validationStatus ? (
+                <div className="empty-state">
+                  <div className="empty-icon">⏳</div>
+                  <div className="empty-text">Validation result not found. Uploaded file has not been processed with validation rules</div>
                 </div>
               ) : (
-                <div className="validation-result-enhanced">
-                  <div className={`validation-status-enhanced ${ingestionState.validationStatus.status.toLowerCase()}`}>
+                <div className="validation-result">
+                  <div className={`validation-status status-${ingestionState.validationStatus.status.toLowerCase()}`}>
                     {ingestionState.validationStatus.status === 'Validated' ? '✅' : '❌'} {ingestionState.validationStatus.status}
                   </div>
-                  <div className="validation-timestamp">
-                    Processed: {ingestionState.validationStatus.timestamp}
-                  </div>
-                  {ingestionState.validationStatus.errors?.length > 0 && (
+                  <div className="validation-timestamp">Validated: {ingestionState.validationStatus.timestamp}</div>
+                  {ingestionState.validationStatus.errors.length > 0 && (
                     <div className="validation-errors">
-                      <h5>Validation Errors:</h5>
+                      <div className="errors-title">Errors found:</div>
                       {ingestionState.validationStatus.errors.map((error, index) => (
-                        <div key={index} className="error-item">❌ {error}</div>
+                        <div key={index} className="error-item">• {error}</div>
                       ))}
                     </div>
                   )}
                 </div>
               )}
+              
+              <div className="validation-actions">
+                <button 
+                  className="btn btn-primary" 
+                  onClick={runValidation}
+                  disabled={ingestionState.isValidating || !ingestionState.selectedFile}
+                >
+                  {ingestionState.isValidating ? '⏳ Validating...' : '🔍 Run Validation'}
+                </button>
+                <button 
+                  className="btn btn-secondary"
+                  disabled={!ingestionState.validationStatus}
+                >
+                  🔄 Reprocess
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1448,207 +1354,192 @@ export default function App() {
 
       {/* Section 3: Recent Data Uploads Table */}
       <div className="uploads-table-section">
-        <h3 className="widget-section-title">📋 Recent Data Uploads Table</h3>
-        
-        <div className="table-controls">
-          <div className="table-filters">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="🔍 Search files..."
-              value={ingestionState.searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-            <select
-              className="filter-select"
-              value={ingestionState.filterStatus}
-              onChange={(e) => handleFilter(e.target.value)}
+        <div className="table-header-section">
+          <h2 className="section-title">📋 Recent Data Uploads</h2>
+          <div className="table-controls">
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="🔍 Search files..."
+                value={ingestionState.searchTerm}
+                onChange={(e) => setIngestionState(prev => ({...prev, searchTerm: e.target.value}))}
+                className="search-input"
+              />
+            </div>
+            <select 
+              className="status-filter"
+              value={ingestionState.statusFilter}
+              onChange={(e) => setIngestionState(prev => ({...prev, statusFilter: e.target.value}))}
             >
-              <option value="all">All Status</option>
-              <option value="validated">Validated</option>
-              <option value="pending">Pending</option>
-              <option value="failed">Failed</option>
+              <option>All Status</option>
+              <option>Validated</option>
+              <option>Pending</option>
+              <option>Failed</option>
             </select>
           </div>
-          
-          <div className="table-info">
-            Showing {getPaginatedUploads().length} of {getFilteredUploads().length} datasets
+        </div>
+
+        <div className="table-info-bar">
+          <span className="results-count">Showing {filteredFiles.length} of {mockFiles.length} datasets</span>
+          <div className="table-actions">
+            <button className="btn btn-sm btn-secondary">📊 Export Report</button>
+            <button className="btn btn-sm btn-primary">📥 Bulk Actions</button>
           </div>
         </div>
 
-        <div className="uploads-table-container">
-          <table className="uploads-table-enhanced">
-            <thead>
-              <tr>
-                <th onClick={() => handleSort('fileName')} className="sortable">
-                  📄 File Name {ingestionState.sortBy === 'fileName' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
-                </th>
-                <th onClick={() => handleSort('sourceType')} className="sortable">
-                  🏷️ Source Type {ingestionState.sortBy === 'sourceType' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
-                </th>
-                <th onClick={() => handleSort('size')} className="sortable">
-                  💾 Size {ingestionState.sortBy === 'size' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
-                </th>
-                <th onClick={() => handleSort('recordCount')} className="sortable">
-                  📊 Record Count {ingestionState.sortBy === 'recordCount' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
-                </th>
-                <th onClick={() => handleSort('uploadedTime')} className="sortable">
-                  ⏰ Uploaded Time {ingestionState.sortBy === 'uploadedTime' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
-                </th>
-                <th>📈 Status</th>
-                <th>⚙️ Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getPaginatedUploads().map((upload) => (
-                <tr key={upload.id} className="upload-row">
-                  <td className="file-name-cell">
-                    <div className="file-info-inline">
-                      <span className="file-icon">📄</span>
-                      <span className="file-name-text" title={upload.fileName}>{upload.fileName}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span className={`source-badge source-${upload.sourceType.toLowerCase()}`}>
-                      {upload.sourceType}
-                    </span>
-                  </td>
-                  <td>{upload.size}</td>
-                  <td>{upload.recordCount.toLocaleString()}</td>
-                  <td>{upload.uploadedTime}</td>
-                  <td>
-                    <div className="status-cell">
-                      <span className={`status-badge status-${upload.status.toLowerCase()}`}>
-                        {upload.status === 'Validated' ? '✅' : upload.status === 'Pending' ? '⏳' : '❌'} {upload.status}
-                      </span>
-                      {upload.status === 'Failed' && (
-                        <div className="error-count">
-                          ⚠️ {upload.validationErrors} errors
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td>
-                    <div className="actions-cell">
-                      <button 
-                        className="btn btn-sm btn-outline action-btn"
-                        onClick={() => viewUpload(upload)}
-                        title="View details"
-                      >
-                        👁️ View
-                      </button>
-                      <button 
-                        className="btn btn-sm btn-outline action-btn"
-                        onClick={() => revalidateUpload(upload.id)}
-                        title="Revalidate dataset"
-                      >
-                        🔄 Revalidate
-                      </button>
-                      <button 
-                        className="btn btn-sm btn-danger action-btn"
-                        onClick={() => deleteUpload(upload.id)}
-                        title="Delete dataset"
-                      >
-                        🗑️ Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="uploads-table">
+          <div className="table-header">
+            <div className="table-cell header-cell sortable">
+              <span>📄 File Name</span>
+            </div>
+            <div className="table-cell header-cell">
+              <span>🏷️ Source Type</span>
+            </div>
+            <div className="table-cell header-cell">
+              <span>💾 Size</span>
+            </div>
+            <div className="table-cell header-cell">
+              <span>📊 Record Count</span>
+            </div>
+            <div className="table-cell header-cell sortable">
+              <span>⏰ Uploaded Time ▼</span>
+            </div>
+            <div className="table-cell header-cell">
+              <span>📈 Status</span>
+            </div>
+            <div className="table-cell header-cell">
+              <span>⚙️ Actions</span>
+            </div>
+          </div>
+
+          {filteredFiles.map((file) => (
+            <div key={file.id} className="table-row" title={`Quality Score: ${file.quality}% | Columns: ${file.columns}`}>
+              <div className="table-cell file-name-cell">
+                <div className="file-info">
+                  <span className="file-icon">📄</span>
+                  <div className="file-details">
+                    <div className="file-name">{file.name}</div>
+                    <div className="file-quality">Quality: {file.quality}%</div>
+                  </div>
+                </div>
+              </div>
+              <div className="table-cell">
+                <span className={`source-badge source-${file.sourceType.toLowerCase()}`}>
+                  {file.sourceType}
+                </span>
+              </div>
+              <div className="table-cell">{file.size}</div>
+              <div className="table-cell">
+                <div className="record-count">
+                  {file.recordCount.toLocaleString()}
+                  <div className="column-count">{file.columns} columns</div>
+                </div>
+              </div>
+              <div className="table-cell">{file.uploadedTime}</div>
+              <div className="table-cell">
+                <div className={`status-badge status-${file.status}`}>
+                  {file.statusText}
+                  {file.errors > 0 && (
+                    <div className="error-indicator">⚠️ {file.errors} errors</div>
+                  )}
+                </div>
+              </div>
+              <div className="table-cell actions-cell">
+                <div className="action-buttons">
+                  <button 
+                    className="btn btn-sm btn-primary"
+                    onClick={() => viewFile(file)}
+                    title="View details and validation logs"
+                  >
+                    👁️ View
+                  </button>
+                  <button 
+                    className="btn btn-sm btn-secondary"
+                    onClick={() => revalidateFile(file)}
+                    title="Re-run validation workflow"
+                  >
+                    🔄 Revalidate
+                  </button>
+                  <button 
+                    className="btn btn-sm btn-danger"
+                    onClick={() => deleteFile(file.id)}
+                    title="Delete dataset"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Pagination */}
-        <div className="pagination-container">
+        <div className="table-pagination">
           <div className="pagination-info">
-            Page {ingestionState.currentPage} of {getTotalPages()}
+            Page 1 of 1 • {filteredFiles.length} total results
           </div>
           <div className="pagination-controls">
-            <button 
-              className="btn btn-sm btn-outline"
-              disabled={ingestionState.currentPage === 1}
-              onClick={() => setIngestionState(prev => ({...prev, currentPage: prev.currentPage - 1}))}
-            >
-              ← Previous
-            </button>
-            <span className="page-numbers">
-              {Array.from({length: getTotalPages()}, (_, i) => i + 1).map(pageNum => (
-                <button
-                  key={pageNum}
-                  className={`btn btn-sm ${pageNum === ingestionState.currentPage ? 'btn-primary' : 'btn-outline'}`}
-                  onClick={() => setIngestionState(prev => ({...prev, currentPage: pageNum}))}
-                >
-                  {pageNum}
-                </button>
-              ))}
-            </span>
-            <button 
-              className="btn btn-sm btn-outline"
-              disabled={ingestionState.currentPage === getTotalPages()}
-              onClick={() => setIngestionState(prev => ({...prev, currentPage: prev.currentPage + 1}))}
-            >
-              Next →
-            </button>
+            <button className="btn btn-sm btn-secondary" disabled>← Previous</button>
+            <button className="btn btn-sm btn-secondary" disabled>Next →</button>
           </div>
         </div>
       </div>
 
-      {/* Section 4: Footer Metrics Panel - FLEXBOX LAYOUT */}
+      {/* Section 4: Footer Metrics Panel */}
       <div className="footer-metrics-section">
-        <h3 className="widget-section-title">📊 Ingestion Performance KPIs</h3>
-        <div className="footer-metrics-flexbox" style={{
-          display: 'flex',
-          gap: '25px',
-          flexWrap: 'wrap'
-        }}>
-          <div style={{flex: '1', minWidth: '300px'}}>
-            <KPICard
-              title="Data Quality Score"
-              value={`${ingestionState.footerMetrics.dataQualityScore}%`}
-              subtitle="Calculated from validation logs"
-              trend={`${ingestionState.footerMetrics.qualityTrend} vs previous sync`}
-              trendDirection="up"
-              icon="🎯"
-              onClick={() => alert(`Data Quality Breakdown:\n\n📊 Overall Score: ${ingestionState.footerMetrics.dataQualityScore}%\n📈 Trend: ${ingestionState.footerMetrics.qualityTrend}\n\n✅ Schema Compliance: 96.2%\n🔧 Data Integrity: 94.5%\n📏 Format Validation: 93.8%\n\nClick for detailed quality audit logs and recommendations.`)}
-            />
+        <h2 className="section-title">📊 Ingestion KPIs</h2>
+        <div className="footer-metrics-grid">
+          <div className="footer-metric-card quality-score" onClick={() => drillDownMetric('Data Quality Score')}>
+            <div className="metric-header">
+              <div className="metric-icon">🎯</div>
+              <div className="metric-trend positive">{ingestionState.footerMetrics.qualityTrend}</div>
+            </div>
+            <div className="metric-value">{ingestionState.footerMetrics.dataQualityScore}%</div>
+            <div className="metric-label">Data Quality Score</div>
+            <div className="metric-subtitle">Validation success rate</div>
+            <div className="metric-description">
+              Calculated from ingestion and validation logs with trend vs previous sync
+            </div>
           </div>
-          
-          <div style={{flex: '1', minWidth: '300px'}}>
-            <KPICard
-              title="Total Records Ingested"
-              value={ingestionState.footerMetrics.totalRecordsIngested.toLocaleString()}
-              subtitle="Across all data sources"
-              trend={`${ingestionState.footerMetrics.recordsTrend} this sync`}
-              trendDirection="up"
-              icon="📈"
-              onClick={() => alert(`Ingestion Statistics:\n\n📊 Total Records: ${ingestionState.footerMetrics.totalRecordsIngested.toLocaleString()}\n📈 Growth: ${ingestionState.footerMetrics.recordsTrend}\n\n📁 By Source:\n• External: 450,332\n• CRM: 387,291\n• Campaign: 290,268\n\nAccess detailed ingestion logs and performance metrics.`)}
-            />
+
+          <div className="footer-metric-card records-ingested" onClick={() => drillDownMetric('Total Records Ingested')}>
+            <div className="metric-header">
+              <div className="metric-icon">📈</div>
+              <div className="metric-trend positive">{ingestionState.footerMetrics.recordsTrend}</div>
+            </div>
+            <div className="metric-value">{ingestionState.footerMetrics.totalRecordsIngested.toLocaleString()}</div>
+            <div className="metric-label">Total Records Ingested</div>
+            <div className="metric-subtitle">Cumulative data processed</div>
+            <div className="metric-description">
+              All-time total with audit tracking and drill-down capability
+            </div>
           </div>
-          
-          <div style={{flex: '1', minWidth: '300px'}}>
-            <KPICard
-              title="Last Sync"
-              value={ingestionState.footerMetrics.lastSyncTime}
-              subtitle={`Status: ${ingestionState.footerMetrics.syncStatus}`}
-              trend="🔄 Auto-refresh enabled"
-              icon="⏱️"
-              onClick={() => alert(`Sync Status Details:\n\n⏰ Last Sync: ${ingestionState.footerMetrics.lastSyncTime}\n✅ Status: ${ingestionState.footerMetrics.syncStatus.toUpperCase()}\n🔄 Next Sync: In 27 minutes\n\n📋 Sync History:\n• 09:00 - Success (1.2M records)\n• 06:00 - Success (890K records)\n• 03:00 - Success (756K records)\n\nView complete sync audit trail and configuration.`)}
-            />
+
+          <div className="footer-metric-card sync-time" onClick={() => drillDownMetric('Last Sync')}>
+            <div className="metric-header">
+              <div className="metric-icon">🔄</div>
+              <div className={`sync-indicator ${ingestionState.footerMetrics.syncStatus}`}>
+                {ingestionState.footerMetrics.syncStatus === 'healthy' ? '🟢' : '🟡'} {ingestionState.footerMetrics.syncStatus}
+              </div>
+            </div>
+            <div className="metric-value">{ingestionState.footerMetrics.lastSyncTime}</div>
+            <div className="metric-label">Last Sync Timestamp</div>
+            <div className="metric-subtitle">Real-time data refresh</div>
+            <div className="metric-description">
+              Auto-refresh indicators with sync status monitoring
+            </div>
           </div>
         </div>
       </div>
 
-      {/* User Identity Display */}
-      <div className="user-identity">
-        <div className="user-avatar-small">ET</div>
-        <div className="user-details-small">
-          <div className="user-name-small">Emma Thompson</div>
-          <div className="user-role-small">Senior Data Analyst</div>
+      {/* Footer */}
+      <div className="ingestion-footer">
+        <div className="footer-info">
+          <p>🔄 Data refreshes automatically every 15 minutes</p>
+          <p>📊 All metrics calculated from ServiceNow ingestion tables</p>
+          <p>🔐 Audit logs available with user tracking and timestamps</p>
         </div>
-        <div className="last-updated">
-          Last updated: {new Date().toLocaleString()} | 
-          <span className="refresh-indicator"> 🔄 Real-time updates active</span>
+        <div className="footer-timestamp">
+          Last updated: {new Date().toLocaleString()}
         </div>
       </div>
     </div>
@@ -1726,7 +1617,7 @@ export default function App() {
               className={`nav-link ${activeTab === 'ingestion' ? 'active' : ''}`}
               onClick={() => handleNavigation('ingestion')}
             >
-              <span class="nav-icon">📥</span>
+              <span className="nav-icon">📥</span>
               Data Ingestion
             </button>
           </div>

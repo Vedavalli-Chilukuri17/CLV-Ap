@@ -45,9 +45,18 @@ declare global {
                         table: 'sys_ux_theme_asset'
                         id: '1b0fd94bc081446692a1d46a6c3356c9'
                     }
+                    'components/RenewalManagement.css': {
+                        table: 'sys_ux_theme_asset'
+                        id: '896b35e0a256425f92b6113e729730f3'
+                        deleted: false
+                    }
                     'data-ingestion-page': {
                         table: 'sys_ui_page'
                         id: '677c1a6998b743b286f0871ba2f922b8'
+                    }
+                    'data-ingestion.css': {
+                        table: 'sys_ux_theme_asset'
+                        id: 'f1c30c94896448e3b4bfeec8fcd16ed7'
                     }
                     eba344c7eba1b2d04870fc4dbad0cd0b: {
                         table: 'sys_app_module'
@@ -92,6 +101,14 @@ declare global {
                         id: '0be8b2a1781741de85034494351bbff0'
                         deleted: true
                     }
+                    'x_hete_clvmaximi_0/data-ingestion-5a39STeQ': {
+                        table: 'sys_ux_lib_asset'
+                        id: '69532bea3d5d483bba5a470fbcbd44b1'
+                    }
+                    'x_hete_clvmaximi_0/data-ingestion-5a39STeQ.js.map': {
+                        table: 'sys_ux_lib_asset'
+                        id: '7dd4320ca2a64f45854da775e75fac3b'
+                    }
                     'x_hete_clvmaximi_0/data-ingestion-main': {
                         table: 'sys_ux_lib_asset'
                         id: 'c18702f1ec26431ba2c2223cd6350ab5'
@@ -103,10 +120,12 @@ declare global {
                     'x_hete_clvmaximi_0/fields-BJKcOzlT': {
                         table: 'sys_ux_lib_asset'
                         id: '07eedc3f019d4699b97350d917debfab'
+                        deleted: true
                     }
                     'x_hete_clvmaximi_0/fields-BJKcOzlT.js.map': {
                         table: 'sys_ux_lib_asset'
                         id: 'a74cd5bef7964e0fa4a370a56eb46456'
+                        deleted: true
                     }
                     'x_hete_clvmaximi_0/main': {
                         table: 'sys_ux_lib_asset'
