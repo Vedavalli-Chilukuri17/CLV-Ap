@@ -41,6 +41,14 @@ declare global {
                         table: 'sys_script_include'
                         id: 'e9a1182bc2104871bd8b16af6d17d5b5'
                     }
+                    'components/CustomerIntelligence.css': {
+                        table: 'sys_ux_theme_asset'
+                        id: '1b0fd94bc081446692a1d46a6c3356c9'
+                    }
+                    'data-ingestion-page': {
+                        table: 'sys_ui_page'
+                        id: '677c1a6998b743b286f0871ba2f922b8'
+                    }
                     eba344c7eba1b2d04870fc4dbad0cd0b: {
                         table: 'sys_app_module'
                         id: 'eba344c7eba1b2d04870fc4dbad0cd0b'
@@ -53,6 +61,52 @@ declare global {
                     'src_server_script-includes_clv-dashboard-ajax_js': {
                         table: 'sys_module'
                         id: '939eb1fcd2974e06a757ef416ec03a82'
+                    }
+                    'x_hete_clvmaximi_0/____insertStyle-KpaFj23u': {
+                        table: 'sys_ux_lib_asset'
+                        id: '1f65ece679cb4d1f8860225037817f5c'
+                        deleted: true
+                    }
+                    'x_hete_clvmaximi_0/____insertStyle-KpaFj23u.js.map': {
+                        table: 'sys_ux_lib_asset'
+                        id: '4db5164e31784f63bf677fbe462e080e'
+                        deleted: true
+                    }
+                    'x_hete_clvmaximi_0/CRMDataAnalyticsWidget-BiItts2Z': {
+                        table: 'sys_ux_lib_asset'
+                        id: '57cdd318a7e04d2bb9e90d3230b0efdd'
+                        deleted: true
+                    }
+                    'x_hete_clvmaximi_0/CRMDataAnalyticsWidget-BiItts2Z.js.map': {
+                        table: 'sys_ux_lib_asset'
+                        id: '574cf3f3dca544ecbef35c6af570262b'
+                        deleted: true
+                    }
+                    'x_hete_clvmaximi_0/CRMDataAnalyticsWidget-PxDdu2id': {
+                        table: 'sys_ux_lib_asset'
+                        id: '48202ddd4fbb4494afad8007ed2a6b0b'
+                        deleted: true
+                    }
+                    'x_hete_clvmaximi_0/CRMDataAnalyticsWidget-PxDdu2id.js.map': {
+                        table: 'sys_ux_lib_asset'
+                        id: '0be8b2a1781741de85034494351bbff0'
+                        deleted: true
+                    }
+                    'x_hete_clvmaximi_0/data-ingestion-main': {
+                        table: 'sys_ux_lib_asset'
+                        id: 'c18702f1ec26431ba2c2223cd6350ab5'
+                    }
+                    'x_hete_clvmaximi_0/data-ingestion-main.js.map': {
+                        table: 'sys_ux_lib_asset'
+                        id: 'ca80f508989d49f6865c45d16531df50'
+                    }
+                    'x_hete_clvmaximi_0/fields-BJKcOzlT': {
+                        table: 'sys_ux_lib_asset'
+                        id: '07eedc3f019d4699b97350d917debfab'
+                    }
+                    'x_hete_clvmaximi_0/fields-BJKcOzlT.js.map': {
+                        table: 'sys_ux_lib_asset'
+                        id: 'a74cd5bef7964e0fa4a370a56eb46456'
                     }
                     'x_hete_clvmaximi_0/main': {
                         table: 'sys_ux_lib_asset'

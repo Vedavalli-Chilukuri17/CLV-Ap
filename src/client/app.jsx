@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { DashboardService } from './services/DashboardService.js';
 import KPICard from './components/KPICard.jsx';
+import CustomerIntelligence from './components/CustomerIntelligence.jsx';
+import RenewalManagement from './components/RenewalManagement.jsx';
 import './app.css';
 
 export default function App() {
@@ -23,9 +25,9 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Campaign Designer state
+  // Campaign Designer state - ISOLATED campaign name state
+  const [campaignName, setCampaignName] = useState('');
   const [campaignState, setCampaignState] = useState({
-    name: '',
     type: '',
     channel: '',
     priority: '',
@@ -39,17 +41,139 @@ export default function App() {
     deliveryChannels: [],
     status: 'draft',
     segmentation: {
-      targetCount: 0,
-      avgCLV: 0,
-      churnRisk: 0,
+      count: 0,
+      clv: 0,
+      churn: 0,
       engagement: 0
     }
   });
 
   const [isGeneratingContent, setIsGeneratingContent] = useState(false);
 
-  // Ref for campaign name input to manage cursor
-  const campaignNameInputRef = useRef(null);
+  // Enhanced Data Ingestion state
+  const [ingestionState, setIngestionState] = useState({
+    uploadedFile: null,
+    uploadProgress: 0,
+    isUploading: false,
+    selectedSourceType: '',
+    filePreview: null,
+    quickAnalytics: null,
+    validationStatus: null,
+    isValidating: false,
+    
+    // Summary Metrics (Section 1)
+    summaryMetrics: {
+      totalDatasets: 47,
+      viewedDatasets: 38,
+      validatedDatasets: 42,
+      failedValidations: 5
+    },
+    
+    // Recent Data Uploads (Section 3) - Enhanced with more details
+    recentUploads: [
+      {
+        id: '1',
+        fileName: 'External Data 1',
+        sourceType: 'External',
+        size: '5MB',
+        recordCount: 1000,
+        uploadedTime: '2023-09-01 10:00',
+        status: 'Validated',
+        quality: 98.5,
+        columns: 6,
+        lastValidated: '2023-09-01 10:15',
+        validationErrors: 0
+      },
+      {
+        id: '2', 
+        fileName: 'Customer File',
+        sourceType: 'Internal',
+        size: '3MB',
+        recordCount: 750,
+        uploadedTime: '2023-09-02 14:30',
+        status: 'Validated',
+        quality: 96.2,
+        columns: 8,
+        lastValidated: '2023-09-02 14:45',
+        validationErrors: 0
+      },
+      {
+        id: '3',
+        fileName: 'Campaign Data',
+        sourceType: 'External',
+        size: '4MB',
+        recordCount: 900,
+        uploadedTime: '2023-09-03 09:45',
+        status: 'Pending',
+        quality: 89.1,
+        columns: 12,
+        lastValidated: null,
+        validationErrors: null
+      },
+      {
+        id: '4',
+        fileName: 'CRM_Integration_Data.csv',
+        sourceType: 'CRM',
+        size: '7.8MB',
+        recordCount: 1200,
+        uploadedTime: '2023-09-04 16:20',
+        status: 'Validated',
+        quality: 94.7,
+        columns: 10,
+        lastValidated: '2023-09-04 16:35',
+        validationErrors: 0
+      },
+      {
+        id: '5',
+        fileName: 'External_Vendor_Feed.xlsx',
+        sourceType: 'External',
+        size: '2.3MB',
+        recordCount: 450,
+        uploadedTime: '2023-09-05 14:10',
+        status: 'Failed',
+        quality: 76.3,
+        columns: 5,
+        lastValidated: '2023-09-05 14:25',
+        validationErrors: 12
+      },
+      {
+        id: '6',
+        fileName: 'Risk_Assessment_Data.json',
+        sourceType: 'Internal',
+        size: '6.1MB',
+        recordCount: 880,
+        uploadedTime: '2023-09-06 11:35',
+        status: 'Validated',
+        quality: 97.8,
+        columns: 9,
+        lastValidated: '2023-09-06 11:50',
+        validationErrors: 0
+      }
+    ],
+    
+    // Footer Metrics (Section 4)
+    footerMetrics: {
+      dataQualityScore: 94.7,
+      totalRecordsIngested: 1127891,
+      lastSyncTime: '3h ago',
+      qualityTrend: '+2.3%',
+      recordsTrend: '+156,332',
+      syncStatus: 'healthy'
+    },
+    
+    // Table state
+    currentPage: 1,
+    itemsPerPage: 6,
+    sortBy: 'uploadedTime',
+    sortDirection: 'desc',
+    filterStatus: 'all',
+    searchQuery: ''
+  });
+
+  // File input ref for data ingestion
+  const fileInputRef = useRef(null);
+  // Debounce timer ref
+  const debounceTimerRef = useRef(null);
 
   // Load dashboard data
   useEffect(() => {
@@ -135,80 +259,105 @@ export default function App() {
     return breadcrumbs[activeTab] || 'CLV Maximization > Executive Dashboard > Overview';
   };
 
-  // Campaign Designer Functions
-  const updateCampaignField = useCallback((field, value) => {
-    setCampaignState(prev => ({
-      ...prev,
-      [field]: value
-    }));
-
-    // Update segmentation when campaign type, customer type, or tier changes
-    if (field === 'type' || field === 'customerType' || field === 'tier') {
-      setTimeout(() => {
-        updateSegmentation(
-          field === 'type' ? value : campaignState.type,
-          field === 'customerType' ? value : campaignState.customerType,
-          field === 'tier' ? value : campaignState.tier
-        );
-      }, 0);
+  // DEBOUNCED segmentation update function
+  const debouncedUpdateSegmentation = useCallback((campaignType, customerType, tier) => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
     }
-  }, [campaignState.type, campaignState.customerType, campaignState.tier]);
-
-  // Special handler for campaign name input with cursor management
-  const handleCampaignNameChange = (e) => {
-    const value = e.target.value;
-    updateCampaignField('name', value);
     
-    // Keep focus and cursor on the input after every character entry
-    setTimeout(() => {
-      if (campaignNameInputRef.current) {
-        campaignNameInputRef.current.focus();
-        // Set cursor position to the end of the text
-        const length = value.length;
-        campaignNameInputRef.current.setSelectionRange(length, length);
-      }
-    }, 0);
-  };
-
-  const updateSegmentation = (campaignType, customerType, tier) => {
-    if (campaignType && customerType) {
-      // Simulate segmentation data based on campaign, customer type, and tier
-      const baseSegmentationData = {
-        'retention,existing': { count: 85, clv: 195000, churn: 45, engagement: 18 },
-        'retention,at_risk': { count: 45, clv: 125000, churn: 75, engagement: 8 },
-        'upsell,high_clv': { count: 25, clv: 450000, churn: 15, engagement: 32 },
-        'upsell,existing': { count: 65, clv: 180000, churn: 25, engagement: 22 },
-        'winback,at_risk': { count: 35, clv: 95000, churn: 85, engagement: 5 },
-        'crosssell,new': { count: 20, clv: 75000, churn: 10, engagement: 15 }
-      };
-      
-      const key = `${campaignType},${customerType}`.toLowerCase().replace(/[\s-]/g, '_');
-      let data = baseSegmentationData[key] || { count: 50, clv: 150000, churn: 40, engagement: 15 };
-      
-      // Adjust data based on tier selection
-      if (tier) {
-        const tierMultipliers = {
-          'platinum': { count: 0.3, clv: 2.5, churn: 0.4, engagement: 1.8 },
-          'gold': { count: 0.5, clv: 1.8, churn: 0.6, engagement: 1.4 },
-          'silver': { count: 0.7, clv: 1.2, churn: 0.8, engagement: 1.1 },
-          'bronze': { count: 0.9, clv: 0.8, churn: 1.2, engagement: 0.8 }
+    debounceTimerRef.current = setTimeout(() => {
+      if (campaignType && customerType) {
+        const baseSegmentationData = {
+          'retention,existing': { count: 85, clv: 195000, churn: 45, engagement: 18 },
+          'retention,at_risk': { count: 45, clv: 125000, churn: 75, engagement: 8 },
+          'upsell,high_clv': { count: 25, clv: 450000, churn: 15, engagement: 32 },
+          'upsell,existing': { count: 65, clv: 180000, churn: 25, engagement: 22 },
+          'winback,at_risk': { count: 35, clv: 95000, churn: 85, engagement: 5 },
+          'crosssell,new': { count: 20, clv: 75000, churn: 10, engagement: 15 }
         };
         
-        const multiplier = tierMultipliers[tier] || { count: 1, clv: 1, churn: 1, engagement: 1 };
-        data = {
-          count: Math.round(data.count * multiplier.count),
-          clv: Math.round(data.clv * multiplier.clv),
-          churn: Math.round(data.churn * multiplier.churn),
-          engagement: Math.round(data.engagement * multiplier.engagement)
-        };
+        const key = `${campaignType},${customerType}`.toLowerCase().replace(/[\s-]/g, '_');
+        let data = baseSegmentationData[key] || { count: 50, clv: 150000, churn: 40, engagement: 15 };
+        
+        // Adjust data based on tier selection
+        if (tier) {
+          const tierMultipliers = {
+            'platinum': { count: 0.3, clv: 2.5, churn: 0.4, engagement: 1.8 },
+            'gold': { count: 0.5, clv: 1.8, churn: 0.6, engagement: 1.4 },
+            'silver': { count: 0.7, clv: 1.2, churn: 0.8, engagement: 1.1 },
+            'bronze': { count: 0.9, clv: 0.8, churn: 1.2, engagement: 0.8 }
+          };
+          
+          const multiplier = tierMultipliers[tier] || { count: 1, clv: 1, churn: 1, engagement: 1 };
+          data = {
+            count: Math.round(data.count * multiplier.count),
+            clv: Math.round(data.clv * multiplier.clv),
+            churn: Math.round(data.churn * multiplier.churn),
+            engagement: Math.round(data.engagement * multiplier.engagement)
+          };
+        }
+        
+        setCampaignState(prev => ({
+          ...prev,
+          segmentation: data
+        }));
       }
-      
-      setCampaignState(prev => ({
-        ...prev,
-        segmentation: data
-      }));
-    }
+    }, 500);
+  }, []);
+
+  // Campaign Designer Functions - Simplified event handlers
+  const handleCampaignTypeChange = (e) => {
+    const value = e.target.value;
+    setCampaignState(prev => ({
+      ...prev,
+      type: value
+    }));
+    debouncedUpdateSegmentation(value, campaignState.customerType, campaignState.tier);
   };
+
+  const handleChannelChange = (e) => {
+    setCampaignState(prev => ({
+      ...prev,
+      channel: e.target.value
+    }));
+  };
+
+  const handlePriorityChange = (e) => {
+    setCampaignState(prev => ({
+      ...prev,
+      priority: e.target.value
+    }));
+  };
+
+  const handleCustomerTypeChange = (e) => {
+    const value = e.target.value;
+    setCampaignState(prev => ({
+      ...prev,
+      customerType: value
+    }));
+    debouncedUpdateSegmentation(campaignState.type, value, campaignState.tier);
+  };
+
+  const handleTierChange = (e) => {
+    const value = e.target.value;
+    setCampaignState(prev => ({
+      ...prev,
+      tier: value
+    }));
+    debouncedUpdateSegmentation(campaignState.type, campaignState.customerType, value);
+  };
+
+  const handleToneStyleChange = (e) => {
+    setCampaignState(prev => ({
+      ...prev,
+      toneStyle: e.target.value
+    }));
+  };
+
+  // COMPLETELY ISOLATED campaign name handler
+  const handleCampaignNameChange = useCallback((e) => {
+    setCampaignName(e.target.value);
+  }, []);
 
   const toggleProductFrequency = (product) => {
     setCampaignState(prev => ({
@@ -229,7 +378,7 @@ export default function App() {
   };
 
   const generateAIContent = async () => {
-    if (!campaignState.name || !campaignState.type || !campaignState.toneStyle) {
+    if (!campaignName || !campaignState.type || !campaignState.toneStyle) {
       alert('Please fill in Campaign Name, Type, and Tone Style before generating content.');
       return;
     }
@@ -264,7 +413,7 @@ export default function App() {
   };
 
   const saveCampaign = () => {
-    if (!campaignState.name || !campaignState.type || !campaignState.messageBody) {
+    if (!campaignName || !campaignState.type || !campaignState.messageBody) {
       alert('Please fill in Campaign Name, Type, and generate content before saving.');
       return;
     }
@@ -272,6 +421,7 @@ export default function App() {
     // Simulate saving to Campaign_Drafts table
     const timestamp = new Date().toISOString();
     console.log('Saving campaign to Campaign_Drafts:', {
+      name: campaignName,
       ...campaignState,
       savedAt: timestamp,
       author: 'Emma Thompson'
@@ -304,15 +454,15 @@ export default function App() {
       }
     }
 
-    const confirmed = confirm(`Launch campaign "${campaignState.name}" immediately?\n\nThis will trigger outreach workflows for: ${campaignState.deliveryChannels.join(', ')}`);
+    const confirmed = confirm(`Launch campaign "${campaignName}" immediately?\n\nThis will trigger outreach workflows for: ${campaignState.deliveryChannels.join(', ')}`);
     
     if (confirmed) {
       // Simulate storing in Campaign_Execution_Log
       const executionData = {
-        campaignName: campaignState.name,
+        campaignName: campaignName,
         launchTimestamp: new Date().toISOString(),
         channels: campaignState.deliveryChannels,
-        targetCount: campaignState.segmentation.targetCount,
+        targetCount: campaignState.segmentation.count,
         status: 'launched'
       };
 
@@ -325,6 +475,217 @@ export default function App() {
 
       alert('Campaign launched successfully! Execution logged in Campaign_Execution_Log. Outreach workflows initiated.');
     }
+  };
+
+  // Enhanced Data Ingestion Functions
+  const handleFileUpload = (files) => {
+    const file = files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['.csv', '.xlsx', '.json'];
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    if (!allowedTypes.includes(fileExtension)) {
+      alert('Please upload a valid file format: .CSV, .XLSX, or .JSON');
+      return;
+    }
+
+    // Validate file size (100MB max)
+    const maxSize = 100 * 1024 * 1024; // 100MB in bytes
+    if (file.size > maxSize) {
+      alert('File size exceeds 100MB limit. Please upload a smaller file.');
+      return;
+    }
+
+    setIngestionState(prev => ({
+      ...prev,
+      uploadedFile: file,
+      isUploading: true,
+      uploadProgress: 0,
+      filePreview: null,
+      quickAnalytics: null,
+      validationStatus: null
+    }));
+
+    // Simulate upload progress
+    const progressInterval = setInterval(() => {
+      setIngestionState(prev => {
+        const newProgress = prev.uploadProgress + 10;
+        if (newProgress >= 100) {
+          clearInterval(progressInterval);
+          // Generate mock preview and analytics after upload
+          generateFilePreview(file);
+          return {
+            ...prev,
+            uploadProgress: 100,
+            isUploading: false
+          };
+        }
+        return {
+          ...prev,
+          uploadProgress: newProgress
+        };
+      });
+    }, 200);
+  };
+
+  const generateFilePreview = (file) => {
+    // Mock data preview based on file type
+    const mockPreviewData = [
+      ['Customer ID', 'Name', 'Email', 'CLV', 'Tier', 'Risk Level'],
+      ['C001', 'John Smith', 'john@email.com', '$45,000', 'Gold', 'Low'],
+      ['C002', 'Jane Doe', 'jane@email.com', '$67,500', 'Platinum', 'Medium'],
+      ['C003', 'Bob Johnson', 'bob@email.com', '$23,000', 'Silver', 'High'],
+      ['C004', 'Alice Brown', 'alice@email.com', '$89,000', 'Platinum', 'Low'],
+      ['C005', 'Charlie Wilson', 'charlie@email.com', '$34,000', 'Bronze', 'Medium'],
+      ['C006', 'Diana Davis', 'diana@email.com', '$52,000', 'Gold', 'Low'],
+      ['C007', 'Ethan Miller', 'ethan@email.com', '$78,000', 'Platinum', 'Medium'],
+      ['C008', 'Fiona Garcia', 'fiona@email.com', '$31,000', 'Silver', 'High'],
+      ['C009', 'George Rodriguez', 'george@email.com', '$65,000', 'Gold', 'Low'],
+      ['C010', 'Helen Martinez', 'helen@email.com', '$42,000', 'Silver', 'Medium']
+    ];
+
+    const mockAnalytics = {
+      recordCount: Math.floor(Math.random() * 5000) + 500,
+      columnCount: 6,
+      nullValues: Math.floor(Math.random() * 50) + 5
+    };
+
+    setIngestionState(prev => ({
+      ...prev,
+      filePreview: mockPreviewData,
+      quickAnalytics: mockAnalytics
+    }));
+  };
+
+  const runValidation = () => {
+    setIngestionState(prev => ({
+      ...prev,
+      isValidating: true
+    }));
+
+    // Simulate validation process
+    setTimeout(() => {
+      const validationResult = {
+        status: Math.random() > 0.2 ? 'Validated' : 'Failed',
+        errors: Math.random() > 0.5 ? [] : ['Missing required field: Customer ID', 'Invalid email format in row 15'],
+        timestamp: new Date().toLocaleString()
+      };
+
+      setIngestionState(prev => ({
+        ...prev,
+        isValidating: false,
+        validationStatus: validationResult
+      }));
+    }, 3000);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    handleFileUpload(files);
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
+  const deleteUpload = (uploadId) => {
+    const confirmed = confirm('Are you sure you want to delete this upload?');
+    if (confirmed) {
+      setIngestionState(prev => ({
+        ...prev,
+        recentUploads: prev.recentUploads.filter(upload => upload.id !== uploadId)
+      }));
+    }
+  };
+
+  const viewUpload = (upload) => {
+    alert(`Viewing details for: ${upload.fileName}\n\nSource: ${upload.sourceType}\nSize: ${upload.size}\nRecords: ${upload.recordCount}\nQuality: ${upload.quality}%\nColumns: ${upload.columns}\nStatus: ${upload.status}\nLast Validated: ${upload.lastValidated || 'Never'}\nValidation Errors: ${upload.validationErrors || 0}`);
+  };
+
+  const revalidateUpload = (uploadId) => {
+    alert(`Initiating revalidation for dataset ID: ${uploadId}\n\nValidation workflow will be triggered and results will be updated in real-time.`);
+  };
+
+  // Table functions
+  const handleSort = (column) => {
+    setIngestionState(prev => ({
+      ...prev,
+      sortBy: column,
+      sortDirection: prev.sortBy === column && prev.sortDirection === 'asc' ? 'desc' : 'asc'
+    }));
+  };
+
+  const handleFilter = (status) => {
+    setIngestionState(prev => ({
+      ...prev,
+      filterStatus: status,
+      currentPage: 1
+    }));
+  };
+
+  const handleSearch = (query) => {
+    setIngestionState(prev => ({
+      ...prev,
+      searchQuery: query,
+      currentPage: 1
+    }));
+  };
+
+  // Filter and sort uploads
+  const getFilteredUploads = () => {
+    let filtered = [...ingestionState.recentUploads];
+    
+    // Apply status filter
+    if (ingestionState.filterStatus !== 'all') {
+      filtered = filtered.filter(upload => 
+        upload.status.toLowerCase() === ingestionState.filterStatus.toLowerCase()
+      );
+    }
+    
+    // Apply search filter
+    if (ingestionState.searchQuery) {
+      filtered = filtered.filter(upload => 
+        upload.fileName.toLowerCase().includes(ingestionState.searchQuery.toLowerCase()) ||
+        upload.sourceType.toLowerCase().includes(ingestionState.searchQuery.toLowerCase())
+      );
+    }
+    
+    // Apply sorting
+    filtered.sort((a, b) => {
+      let aVal = a[ingestionState.sortBy];
+      let bVal = b[ingestionState.sortBy];
+      
+      if (ingestionState.sortBy === 'uploadedTime') {
+        aVal = new Date(aVal);
+        bVal = new Date(bVal);
+      } else if (ingestionState.sortBy === 'recordCount') {
+        aVal = Number(aVal);
+        bVal = Number(bVal);
+      }
+      
+      if (aVal < bVal) return ingestionState.sortDirection === 'asc' ? -1 : 1;
+      if (aVal > bVal) return ingestionState.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+    
+    return filtered;
+  };
+
+  // Pagination
+  const getPaginatedUploads = () => {
+    const filtered = getFilteredUploads();
+    const startIndex = (ingestionState.currentPage - 1) * ingestionState.itemsPerPage;
+    return filtered.slice(startIndex, startIndex + ingestionState.itemsPerPage);
+  };
+
+  const getTotalPages = () => {
+    return Math.ceil(getFilteredUploads().length / ingestionState.itemsPerPage);
   };
 
   // Original Dashboard Content Component
@@ -464,74 +825,11 @@ export default function App() {
     );
   };
 
-  // Tab Content Components
-  const RenewalContent = () => (
-    <div className="tab-content">
-      <h2 className="section-title">🔄 Renewal Pipeline Management</h2>
-      <p className="tab-description">Manage and track policy renewals across different time horizons with priority-based intervention strategies.</p>
-      
-      <div className="kpi-grid">
-        <KPICard
-          title="Due in 30 Days"
-          value="25"
-          subtitle="Immediate action required"
-          icon="⏰"
-        />
-        <KPICard
-          title="Due in 60 Days"
-          value="38"
-          subtitle="Planning horizon"
-          icon="📅"
-        />
-        <KPICard
-          title="Due in 90 Days"
-          value="52"
-          subtitle="Strategic planning"
-          icon="📈"
-        />
-        <KPICard
-          title="Total Value at Risk"
-          value="$3.2M"
-          subtitle="Potential revenue impact"
-          icon="💰"
-        />
-      </div>
-    </div>
-  );
+  // Tab Content Components - Now using the new RenewalManagement component
+  const RenewalContent = () => <RenewalManagement />;
 
-  const IntelligenceContent = () => (
-    <div className="tab-content">
-      <h2 className="section-title">🧠 Customer Intelligence & Insights</h2>
-      <p className="tab-description">Advanced analytics and behavioral insights to drive personalized customer engagement strategies.</p>
-      
-      <div className="kpi-grid">
-        <KPICard
-          title="Digital Natives"
-          value="42%"
-          subtitle="Tech-savvy customers"
-          icon="📱"
-        />
-        <KPICard
-          title="Traditional Customers"
-          value="38%"
-          subtitle="Phone & in-person preference"
-          icon="📞"
-        />
-        <KPICard
-          title="Hybrid Users"
-          value="20%"
-          subtitle="Multi-channel engagement"
-          icon="🔗"
-        />
-        <KPICard
-          title="Mobile App Adoption"
-          value="73%"
-          subtitle="Self-service engagement"
-          icon="📲"
-        />
-      </div>
-    </div>
-  );
+  // Customer Intelligence Content - Using the new component
+  const IntelligenceContent = () => <CustomerIntelligence />;
 
   const CampaignContent = () => (
     <div className="campaign-designer">
@@ -550,30 +848,22 @@ export default function App() {
           <div className="form-group">
             <label className="form-label">Campaign Name</label>
             <input
-              ref={campaignNameInputRef}
               type="text"
               className="form-control"
               placeholder="e.g., Fall Renters Campaign"
-              value={campaignState.name}
+              value={campaignName}
               onChange={handleCampaignNameChange}
               autoComplete="off"
-              onBlur={() => {
-                // Re-focus after blur to maintain cursor position
-                setTimeout(() => {
-                  if (campaignNameInputRef.current && campaignState.name) {
-                    campaignNameInputRef.current.focus();
-                  }
-                }, 10);
-              }}
+              key="campaign-name-input" 
             />
           </div>
 
           <div className="form-group">
             <label className="form-label">Campaign Type</label>
             <select
-              className="form-control"
+              className="form-control dropdown-select"
               value={campaignState.type}
-              onChange={(e) => updateCampaignField('type', e.target.value)}
+              onChange={handleCampaignTypeChange}
             >
               <option value="">Select campaign type...</option>
               <option value="retention">Retention</option>
@@ -586,9 +876,9 @@ export default function App() {
           <div className="form-group">
             <label className="form-label">Channel</label>
             <select
-              className="form-control"
+              className="form-control dropdown-select"
               value={campaignState.channel}
-              onChange={(e) => updateCampaignField('channel', e.target.value)}
+              onChange={handleChannelChange}
             >
               <option value="">Select channel...</option>
               <option value="email">Email</option>
@@ -601,9 +891,9 @@ export default function App() {
           <div className="form-group">
             <label className="form-label">Priority</label>
             <select
-              className="form-control"
+              className="form-control dropdown-select"
               value={campaignState.priority}
-              onChange={(e) => updateCampaignField('priority', e.target.value)}
+              onChange={handlePriorityChange}
             >
               <option value="">Select priority...</option>
               <option value="high">High</option>
@@ -615,9 +905,9 @@ export default function App() {
           <div className="form-group">
             <label className="form-label">Customer Type</label>
             <select
-              className="form-control"
+              className="form-control dropdown-select"
               value={campaignState.customerType}
-              onChange={(e) => updateCampaignField('customerType', e.target.value)}
+              onChange={handleCustomerTypeChange}
             >
               <option value="">Select customer type...</option>
               <option value="new">New</option>
@@ -630,9 +920,9 @@ export default function App() {
           <div className="form-group">
             <label className="form-label">Tier</label>
             <select
-              className="form-control"
+              className="form-control dropdown-select"
               value={campaignState.tier}
-              onChange={(e) => updateCampaignField('tier', e.target.value)}
+              onChange={handleTierChange}
             >
               <option value="">Select tier...</option>
               <option value="platinum">Platinum</option>
@@ -707,9 +997,9 @@ export default function App() {
           <div className="form-group">
             <label className="form-label">Tone Style</label>
             <select
-              className="form-control"
+              className="form-control dropdown-select"
               value={campaignState.toneStyle}
-              onChange={(e) => updateCampaignField('toneStyle', e.target.value)}
+              onChange={handleToneStyleChange}
             >
               <option value="">Select tone...</option>
               <option value="professional">Professional</option>
@@ -726,7 +1016,7 @@ export default function App() {
             className="form-control message-textarea"
             placeholder="AI-generated campaign message will appear here..."
             value={campaignState.messageBody}
-            onChange={(e) => updateCampaignField('messageBody', e.target.value)}
+            onChange={(e) => setCampaignState(prev => ({ ...prev, messageBody: e.target.value }))}
             rows={8}
           />
           
@@ -776,7 +1066,7 @@ export default function App() {
               type="date"
               className="form-control"
               value={campaignState.launchDate}
-              onChange={(e) => updateCampaignField('launchDate', e.target.value)}
+              onChange={(e) => setCampaignState(prev => ({ ...prev, launchDate: e.target.value }))}
             />
           </div>
 
@@ -786,7 +1076,7 @@ export default function App() {
               type="time"
               className="form-control"
               value={campaignState.launchTime}
-              onChange={(e) => updateCampaignField('launchTime', e.target.value)}
+              onChange={(e) => setCampaignState(prev => ({ ...prev, launchTime: e.target.value }))}
             />
           </div>
         </div>
@@ -897,36 +1187,469 @@ export default function App() {
     </div>
   );
 
+  // Enhanced Data Ingestion Content Component - SIMPLIFIED VERSION WITHOUT PROBLEMATIC WIDGET
   const IngestionContent = () => (
-    <div className="tab-content">
+    <div className="data-ingestion-comprehensive">
       <h2 className="section-title">📥 Data Ingestion & Management</h2>
-      <p className="tab-description">Manage data imports, transformations, and integrations to keep your customer intelligence platform up-to-date.</p>
-      
-      <div className="kpi-grid">
-        <KPICard
-          title="Records Processed"
-          value="430"
-          subtitle="Last 2 hours"
-          icon="📊"
-        />
-        <KPICard
-          title="Success Rate"
-          value="98.4%"
-          subtitle="Data quality excellent"
-          icon="✅"
-        />
-        <KPICard
-          title="Validation Errors"
-          value="7"
-          subtitle="Require attention"
-          icon="⚠️"
-        />
-        <KPICard
-          title="Data Sources"
-          value="5"
-          subtitle="Active integrations"
-          icon="🔗"
-        />
+      <p className="tab-description">
+        Modular, dynamic interface supporting multi-source file uploads, validation workflows, preview panels, 
+        ingestion analytics, and audit tracking with real-time data from ServiceNow built-in tables.
+      </p>
+
+      {/* Section 1: Summary Metrics Panel (Top) - FLEXBOX LAYOUT */}
+      <div className="summary-metrics-section">
+        <h3 className="widget-section-title">📊 Summary Metrics Panel</h3>
+        <div className="summary-metrics-flexbox" style={{
+          display: 'flex',
+          gap: '25px',
+          flexWrap: 'wrap',
+          marginBottom: '30px'
+        }}>
+          <div style={{flex: '1', minWidth: '300px'}}>
+            <KPICard
+              title="Total Datasets"
+              value={ingestionState.summaryMetrics.totalDatasets.toString()}
+              subtitle="All uploaded datasets"
+              trend="📊 Click to drill-down"
+              icon="📁"
+              className={ingestionState.summaryMetrics.failedValidations > 0 ? 'has-anomaly' : ''}
+              onClick={() => alert('Drilling down to dataset-level details:\n\n• Active Datasets: 42\n• Archived Datasets: 5\n• Processing Queue: 2\n\nClick on individual datasets for detailed metadata and lineage information.')}
+            />
+          </div>
+          
+          <div style={{flex: '1', minWidth: '300px'}}>
+            <KPICard
+              title="Viewed Datasets"
+              value={ingestionState.summaryMetrics.viewedDatasets.toString()}
+              subtitle="Datasets opened/reviewed"
+              trend="👁️ View dataset details"
+              icon="📋"
+              onClick={() => alert('Drilling down to viewed datasets:\n\n• Recently Viewed: 12\n• Frequently Accessed: 8\n• Pending Review: 18\n\nAccess detailed viewing logs and user activity tracking.')}
+            />
+          </div>
+          
+          <div style={{flex: '1', minWidth: '300px'}}>
+            <KPICard
+              title="Validated Datasets"
+              value={ingestionState.summaryMetrics.validatedDatasets.toString()}
+              subtitle="Successfully validated"
+              trend={`${ingestionState.summaryMetrics.failedValidations} failures detected`}
+              trendDirection={ingestionState.summaryMetrics.failedValidations > 0 ? 'down' : 'up'}
+              icon="✅"
+              className={ingestionState.summaryMetrics.failedValidations > 0 ? 'has-anomaly' : ''}
+              onClick={() => alert(`Validation Summary:\n\n✅ Validated: ${ingestionState.summaryMetrics.validatedDatasets}\n❌ Failed: ${ingestionState.summaryMetrics.failedValidations}\n⏳ Pending: ${ingestionState.summaryMetrics.totalDatasets - ingestionState.summaryMetrics.validatedDatasets - ingestionState.summaryMetrics.failedValidations}\n\nClick for detailed validation logs and error analysis.`)}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Section 2: Upload & Validation Workflow */}
+      <div className="upload-workflow-section">
+        <h3 className="widget-section-title">⚙️ Upload & Validation Workflow</h3>
+        
+        {/* Upload Interface */}
+        <div className="upload-interface-container">
+          <div className="upload-zone-widget">
+            <div className="widget-header">
+              <h4 className="widget-title">📤 Drag-and-Drop Upload Interface</h4>
+              <div className="refresh-indicator">🔄 Real-time status</div>
+            </div>
+            <div className="widget-content">
+              <div className="upload-controls-enhanced">
+                <div className="source-selector">
+                  <label className="form-label">Select Source Type</label>
+                  <select 
+                    className="form-control source-select-enhanced"
+                    value={ingestionState.selectedSourceType}
+                    onChange={(e) => setIngestionState(prev => ({...prev, selectedSourceType: e.target.value}))}
+                  >
+                    <option value="">Select Source Type...</option>
+                    <option value="external">External</option>
+                    <option value="crm">CRM</option>
+                    <option value="campaign">Campaign</option>
+                    <option value="internal">Internal</option>
+                  </select>
+                </div>
+                
+                <button className="btn btn-primary upload-btn-enhanced" onClick={triggerFileInput}>
+                  📁 Upload Dataset
+                </button>
+              </div>
+              
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv,.xlsx,.json"
+                onChange={(e) => handleFileUpload(Array.from(e.target.files))}
+                style={{ display: 'none' }}
+              />
+              
+              <div 
+                className={`upload-dropzone-enhanced ${ingestionState.isUploading ? 'uploading' : ''}`}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onClick={triggerFileInput}
+              >
+                <div className="dropzone-content">
+                  <div className="dropzone-icon">📁</div>
+                  <div className="dropzone-text">
+                    {ingestionState.isUploading ? 'Uploading...' : 'Drag & Drop files or click to upload'}
+                  </div>
+                  <div className="dropzone-formats">
+                    Supported: <strong>.CSV</strong>, <strong>.XLSX</strong>, <strong>.JSON</strong> (Max: <strong>100MB</strong>)
+                  </div>
+                </div>
+                
+                {ingestionState.isUploading && (
+                  <div className="upload-progress">
+                    <div className="progress-bar">
+                      <div 
+                        className="progress-fill" 
+                        style={{ width: `${ingestionState.uploadProgress}%` }}
+                      ></div>
+                    </div>
+                    <div className="progress-text">{ingestionState.uploadProgress}%</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Preview, Analytics, and Validation Panels - FLEXBOX LAYOUT */}
+        <div className="workflow-panels-flexbox" style={{
+          display: 'flex',
+          gap: '25px',
+          flexWrap: 'wrap',
+          marginTop: '30px'
+        }}>
+          {/* Data Preview Panel */}
+          <div className="workflow-panel" style={{flex: '1', minWidth: '350px'}}>
+            <div className="panel-header">
+              <h4 className="panel-title">📋 Data Preview Panel</h4>
+            </div>
+            <div className="panel-content">
+              {!ingestionState.filePreview ? (
+                <div className="empty-state">
+                  <div className="empty-icon">📄</div>
+                  <p className="empty-message">No data preview available. Please upload a file to preview data.</p>
+                </div>
+              ) : (
+                <div className="data-preview-enhanced">
+                  <div className="preview-header">First 10 rows preview:</div>
+                  <div className="preview-table-container">
+                    <table className="preview-table-enhanced">
+                      <thead>
+                        <tr>
+                          {ingestionState.filePreview[0]?.map((header, index) => (
+                            <th key={index}>{header}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {ingestionState.filePreview.slice(1, 11).map((row, index) => (
+                          <tr key={index}>
+                            {row.map((cell, cellIndex) => (
+                              <td key={cellIndex}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Quick Analytics Panel */}
+          <div className="workflow-panel" style={{flex: '1', minWidth: '350px'}}>
+            <div className="panel-header">
+              <h4 className="panel-title">📈 Quick Analytics Panel</h4>
+            </div>
+            <div className="panel-content">
+              {!ingestionState.quickAnalytics ? (
+                <div className="empty-state">
+                  <div className="empty-icon">📊</div>
+                  <p className="empty-message">Upload a file to view analytics</p>
+                </div>
+              ) : (
+                <div className="analytics-stats-enhanced">
+                  <div className="stat-item-enhanced">
+                    <span className="stat-icon">📊</span>
+                    <span className="stat-label">Record Count:</span>
+                    <span className="stat-value">{ingestionState.quickAnalytics.recordCount.toLocaleString()}</span>
+                  </div>
+                  <div className="stat-item-enhanced">
+                    <span className="stat-icon">🗂️</span>
+                    <span className="stat-label">Column Count:</span>
+                    <span className="stat-value">{ingestionState.quickAnalytics.columnCount}</span>
+                  </div>
+                  <div className="stat-item-enhanced">
+                    <span className="stat-icon">⚠️</span>
+                    <span className="stat-label">Null Values:</span>
+                    <span className="stat-value">{ingestionState.quickAnalytics.nullValues}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Validation Panel */}
+          <div className="workflow-panel" style={{flex: '1', minWidth: '350px'}}>
+            <div className="panel-header">
+              <h4 className="panel-title">✅ Validation Panel</h4>
+            </div>
+            <div className="panel-content">
+              {!ingestionState.validationStatus ? (
+                <div className="validation-pending">
+                  <div className="validation-icon">⏳</div>
+                  <p className="validation-message">
+                    Validation result not found. Uploaded file has not been processed with validation rules.
+                  </p>
+                  <div className="validation-actions">
+                    <button 
+                      className="btn btn-primary btn-sm"
+                      onClick={runValidation}
+                      disabled={!ingestionState.uploadedFile || ingestionState.isValidating}
+                    >
+                      {ingestionState.isValidating ? '⏳ Running Validation...' : '🔍 Run Validation'}
+                    </button>
+                    <button 
+                      className="btn btn-secondary btn-sm"
+                      disabled={!ingestionState.uploadedFile}
+                    >
+                      🔄 Reprocess
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="validation-result-enhanced">
+                  <div className={`validation-status-enhanced ${ingestionState.validationStatus.status.toLowerCase()}`}>
+                    {ingestionState.validationStatus.status === 'Validated' ? '✅' : '❌'} {ingestionState.validationStatus.status}
+                  </div>
+                  <div className="validation-timestamp">
+                    Processed: {ingestionState.validationStatus.timestamp}
+                  </div>
+                  {ingestionState.validationStatus.errors?.length > 0 && (
+                    <div className="validation-errors">
+                      <h5>Validation Errors:</h5>
+                      {ingestionState.validationStatus.errors.map((error, index) => (
+                        <div key={index} className="error-item">❌ {error}</div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Section 3: Recent Data Uploads Table */}
+      <div className="uploads-table-section">
+        <h3 className="widget-section-title">📋 Recent Data Uploads Table</h3>
+        
+        <div className="table-controls">
+          <div className="table-filters">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="🔍 Search files..."
+              value={ingestionState.searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+            <select
+              className="filter-select"
+              value={ingestionState.filterStatus}
+              onChange={(e) => handleFilter(e.target.value)}
+            >
+              <option value="all">All Status</option>
+              <option value="validated">Validated</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
+            </select>
+          </div>
+          
+          <div className="table-info">
+            Showing {getPaginatedUploads().length} of {getFilteredUploads().length} datasets
+          </div>
+        </div>
+
+        <div className="uploads-table-container">
+          <table className="uploads-table-enhanced">
+            <thead>
+              <tr>
+                <th onClick={() => handleSort('fileName')} className="sortable">
+                  📄 File Name {ingestionState.sortBy === 'fileName' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
+                </th>
+                <th onClick={() => handleSort('sourceType')} className="sortable">
+                  🏷️ Source Type {ingestionState.sortBy === 'sourceType' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
+                </th>
+                <th onClick={() => handleSort('size')} className="sortable">
+                  💾 Size {ingestionState.sortBy === 'size' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
+                </th>
+                <th onClick={() => handleSort('recordCount')} className="sortable">
+                  📊 Record Count {ingestionState.sortBy === 'recordCount' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
+                </th>
+                <th onClick={() => handleSort('uploadedTime')} className="sortable">
+                  ⏰ Uploaded Time {ingestionState.sortBy === 'uploadedTime' && (ingestionState.sortDirection === 'asc' ? '▲' : '▼')}
+                </th>
+                <th>📈 Status</th>
+                <th>⚙️ Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {getPaginatedUploads().map((upload) => (
+                <tr key={upload.id} className="upload-row">
+                  <td className="file-name-cell">
+                    <div className="file-info-inline">
+                      <span className="file-icon">📄</span>
+                      <span className="file-name-text" title={upload.fileName}>{upload.fileName}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`source-badge source-${upload.sourceType.toLowerCase()}`}>
+                      {upload.sourceType}
+                    </span>
+                  </td>
+                  <td>{upload.size}</td>
+                  <td>{upload.recordCount.toLocaleString()}</td>
+                  <td>{upload.uploadedTime}</td>
+                  <td>
+                    <div className="status-cell">
+                      <span className={`status-badge status-${upload.status.toLowerCase()}`}>
+                        {upload.status === 'Validated' ? '✅' : upload.status === 'Pending' ? '⏳' : '❌'} {upload.status}
+                      </span>
+                      {upload.status === 'Failed' && (
+                        <div className="error-count">
+                          ⚠️ {upload.validationErrors} errors
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td>
+                    <div className="actions-cell">
+                      <button 
+                        className="btn btn-sm btn-outline action-btn"
+                        onClick={() => viewUpload(upload)}
+                        title="View details"
+                      >
+                        👁️ View
+                      </button>
+                      <button 
+                        className="btn btn-sm btn-outline action-btn"
+                        onClick={() => revalidateUpload(upload.id)}
+                        title="Revalidate dataset"
+                      >
+                        🔄 Revalidate
+                      </button>
+                      <button 
+                        className="btn btn-sm btn-danger action-btn"
+                        onClick={() => deleteUpload(upload.id)}
+                        title="Delete dataset"
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="pagination-container">
+          <div className="pagination-info">
+            Page {ingestionState.currentPage} of {getTotalPages()}
+          </div>
+          <div className="pagination-controls">
+            <button 
+              className="btn btn-sm btn-outline"
+              disabled={ingestionState.currentPage === 1}
+              onClick={() => setIngestionState(prev => ({...prev, currentPage: prev.currentPage - 1}))}
+            >
+              ← Previous
+            </button>
+            <span className="page-numbers">
+              {Array.from({length: getTotalPages()}, (_, i) => i + 1).map(pageNum => (
+                <button
+                  key={pageNum}
+                  className={`btn btn-sm ${pageNum === ingestionState.currentPage ? 'btn-primary' : 'btn-outline'}`}
+                  onClick={() => setIngestionState(prev => ({...prev, currentPage: pageNum}))}
+                >
+                  {pageNum}
+                </button>
+              ))}
+            </span>
+            <button 
+              className="btn btn-sm btn-outline"
+              disabled={ingestionState.currentPage === getTotalPages()}
+              onClick={() => setIngestionState(prev => ({...prev, currentPage: prev.currentPage + 1}))}
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Section 4: Footer Metrics Panel - FLEXBOX LAYOUT */}
+      <div className="footer-metrics-section">
+        <h3 className="widget-section-title">📊 Ingestion Performance KPIs</h3>
+        <div className="footer-metrics-flexbox" style={{
+          display: 'flex',
+          gap: '25px',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{flex: '1', minWidth: '300px'}}>
+            <KPICard
+              title="Data Quality Score"
+              value={`${ingestionState.footerMetrics.dataQualityScore}%`}
+              subtitle="Calculated from validation logs"
+              trend={`${ingestionState.footerMetrics.qualityTrend} vs previous sync`}
+              trendDirection="up"
+              icon="🎯"
+              onClick={() => alert(`Data Quality Breakdown:\n\n📊 Overall Score: ${ingestionState.footerMetrics.dataQualityScore}%\n📈 Trend: ${ingestionState.footerMetrics.qualityTrend}\n\n✅ Schema Compliance: 96.2%\n🔧 Data Integrity: 94.5%\n📏 Format Validation: 93.8%\n\nClick for detailed quality audit logs and recommendations.`)}
+            />
+          </div>
+          
+          <div style={{flex: '1', minWidth: '300px'}}>
+            <KPICard
+              title="Total Records Ingested"
+              value={ingestionState.footerMetrics.totalRecordsIngested.toLocaleString()}
+              subtitle="Across all data sources"
+              trend={`${ingestionState.footerMetrics.recordsTrend} this sync`}
+              trendDirection="up"
+              icon="📈"
+              onClick={() => alert(`Ingestion Statistics:\n\n📊 Total Records: ${ingestionState.footerMetrics.totalRecordsIngested.toLocaleString()}\n📈 Growth: ${ingestionState.footerMetrics.recordsTrend}\n\n📁 By Source:\n• External: 450,332\n• CRM: 387,291\n• Campaign: 290,268\n\nAccess detailed ingestion logs and performance metrics.`)}
+            />
+          </div>
+          
+          <div style={{flex: '1', minWidth: '300px'}}>
+            <KPICard
+              title="Last Sync"
+              value={ingestionState.footerMetrics.lastSyncTime}
+              subtitle={`Status: ${ingestionState.footerMetrics.syncStatus}`}
+              trend="🔄 Auto-refresh enabled"
+              icon="⏱️"
+              onClick={() => alert(`Sync Status Details:\n\n⏰ Last Sync: ${ingestionState.footerMetrics.lastSyncTime}\n✅ Status: ${ingestionState.footerMetrics.syncStatus.toUpperCase()}\n🔄 Next Sync: In 27 minutes\n\n📋 Sync History:\n• 09:00 - Success (1.2M records)\n• 06:00 - Success (890K records)\n• 03:00 - Success (756K records)\n\nView complete sync audit trail and configuration.`)}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* User Identity Display */}
+      <div className="user-identity">
+        <div className="user-avatar-small">ET</div>
+        <div className="user-details-small">
+          <div className="user-name-small">Emma Thompson</div>
+          <div className="user-role-small">Senior Data Analyst</div>
+        </div>
+        <div className="last-updated">
+          Last updated: {new Date().toLocaleString()} | 
+          <span className="refresh-indicator"> 🔄 Real-time updates active</span>
+        </div>
       </div>
     </div>
   );

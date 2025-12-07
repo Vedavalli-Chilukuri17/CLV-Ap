@@ -16,6 +16,12 @@ export default function CustomerIntelligence() {
   const [sortBy, setSortBy] = useState('clv');
   const [sortDirection, setSortDirection] = useState('desc');
   
+  // Profile modal state
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [aiInsightsLoading, setAiInsightsLoading] = useState(false);
+  const [aiInsights, setAiInsights] = useState(null);
+  
   const itemsPerPage = 25;
 
   // Load customer data from policy_holder table
@@ -47,6 +53,266 @@ export default function CustomerIntelligence() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Load customer policies for profile analysis
+  const loadCustomerPolicies = async (customerId) => {
+    try {
+      const response = await fetch(`/api/now/table/x_hete_clvmaximi_0_sold_policy?sysparm_query=policyholderid=${customerId}&sysparm_display_value=all`, {
+        headers: {
+          "Accept": "application/json",
+          "X-UserToken": window.g_ck
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        return data.result || [];
+      }
+      return [];
+    } catch (err) {
+      console.error('Error loading customer policies:', err);
+      return [];
+    }
+  };
+
+  // Generate AI insights for customer profile
+  const generateAIInsights = async (customer, policies) => {
+    setAiInsightsLoading(true);
+    
+    // Simulate AI processing delay
+    await new Promise(resolve => setTimeout(resolve, 4000));
+    
+    const insights = {
+      crossSellOpportunities: generateCrossSellInsights(customer, policies),
+      upsellOpportunities: generateUpsellInsights(customer, policies),
+      coverageGaps: generateCoverageGaps(customer, policies),
+      behavioralInsights: generateBehavioralInsights(customer),
+      creditRiskAnalysis: generateCreditRiskAnalysis(customer),
+      competitiveRisk: generateCompetitiveRisk(customer, policies),
+      lifeEventsDetected: detectLifeEvents(customer),
+      actionPriority: determineActionPriority(customer, policies)
+    };
+    
+    setAiInsights(insights);
+    setAiInsightsLoading(false);
+  };
+
+  const generateCrossSellInsights = (customer, policies) => {
+    const productCount = policies.length;
+    const hasHome = policies.some(p => display(p.policy_type)?.toLowerCase().includes('home'));
+    const hasAuto = policies.some(p => display(p.policy_type)?.toLowerCase().includes('auto'));
+    const hasLife = policies.some(p => display(p.policy_type)?.toLowerCase().includes('life'));
+    
+    if (productCount === 1) {
+      const recommendations = [];
+      if (!hasAuto) recommendations.push('Auto Insurance');
+      if (!hasHome) recommendations.push('Homeowners Insurance');
+      if (!hasLife) recommendations.push('Life Insurance');
+      
+      return {
+        trigger: true,
+        reason: `Customer has only ${productCount} product - high cross-sell potential`,
+        recommendations: recommendations.slice(0, 2),
+        bundleOpportunity: 'Auto + Home + Life Bundle Package',
+        expectedUplift: '25-40% premium increase',
+        priority: 'High'
+      };
+    }
+    
+    return {
+      trigger: false,
+      reason: 'Customer has multiple products',
+      recommendations: [],
+      priority: 'Low'
+    };
+  };
+
+  const generateUpsellInsights = (customer, policies) => {
+    const tier = display(customer.tier)?.toLowerCase();
+    const clv = parseFloat(display(customer.clv) || '0');
+    const isHighTier = tier === 'platinum' || tier === 'gold';
+    
+    if (isHighTier && clv > 50000) {
+      return {
+        trigger: true,
+        reason: `High-value ${tier} tier customer with CLV of ${formatCurrency(clv)}`,
+        recommendations: [
+          'Comprehensive Coverage Package',
+          'Premium Add-on Coverage',
+          'Executive Protection Plan'
+        ],
+        propertyRisk: Math.random() > 0.5 ? 'High property risk exposure detected' : 'Standard property risk',
+        expectedUplift: '15-30% premium increase',
+        priority: 'High'
+      };
+    }
+    
+    return {
+      trigger: false,
+      reason: `${tier} tier customer - standard offerings appropriate`,
+      priority: 'Medium'
+    };
+  };
+
+  const generateCoverageGaps = (customer, policies) => {
+    const gaps = [];
+    const missingCoverage = display(customer.missing_coverage);
+    
+    if (missingCoverage && missingCoverage !== 'None') {
+      gaps.push(`Missing coverage detected: ${missingCoverage}`);
+    }
+    
+    // Simulate endorsement analysis
+    if (Math.random() > 0.7) {
+      gaps.push('Endorsement missing for flood protection');
+    }
+    
+    if (Math.random() > 0.6) {
+      gaps.push('Umbrella policy recommendation for liability protection');
+    }
+    
+    return {
+      hasGaps: gaps.length > 0,
+      identifiedGaps: gaps,
+      riskExposure: gaps.length > 1 ? 'High' : gaps.length === 1 ? 'Medium' : 'Low',
+      priority: gaps.length > 1 ? 'Critical' : gaps.length === 1 ? 'High' : 'Low'
+    };
+  };
+
+  const generateBehavioralInsights = (customer) => {
+    const appSessions = parseInt(display(customer.app_sessions_30_days) || '0');
+    const engagements = parseInt(display(customer.number_of_engagements) || '0');
+    const avgSessionTime = parseFloat(display(customer.avg_session_time_min) || '0');
+    
+    const insights = [];
+    
+    if (appSessions < 5) {
+      insights.push('Low app engagement - potential churn risk');
+    } else if (appSessions > 20) {
+      insights.push('High app engagement - satisfied customer');
+    }
+    
+    if (avgSessionTime > 10) {
+      insights.push('Long session times may indicate confusion or issues');
+    }
+    
+    if (engagements < 3) {
+      insights.push('Limited customer service interactions - good sign');
+    } else if (engagements > 10) {
+      insights.push('High customer service interactions - requires attention');
+    }
+    
+    return {
+      digitalEngagement: appSessions > 15 ? 'High' : appSessions > 5 ? 'Medium' : 'Low',
+      sessionQuality: avgSessionTime > 8 ? 'Good' : 'Needs improvement',
+      serviceInteractions: engagements > 8 ? 'High' : engagements > 3 ? 'Medium' : 'Low',
+      insights: insights,
+      billingIrregularities: Math.random() > 0.8 ? 'Detected' : 'None detected'
+    };
+  };
+
+  const generateCreditRiskAnalysis = (customer) => {
+    const creditScore = parseInt(display(customer.credit_score) || '700');
+    const creditUtilization = parseFloat(display(customer.credit_utilization_percent) || '30');
+    const bankruptcies = display(customer.bankruptcies_flag)?.toLowerCase() === 'true';
+    const delinquency = parseInt(display(customer.delinquency_12m) || '0');
+    
+    let riskLevel = 'Low';
+    let impact = 'Minimal impact on churn risk';
+    
+    if (creditScore < 600 || bankruptcies || delinquency > 2) {
+      riskLevel = 'High';
+      impact = 'Significant increase in churn risk and reduced product propensity';
+    } else if (creditScore < 650 || creditUtilization > 70 || delinquency > 0) {
+      riskLevel = 'Medium';
+      impact = 'Moderate impact on customer stability';
+    }
+    
+    return {
+      creditScore: creditScore,
+      riskLevel: riskLevel,
+      utilizationRate: `${creditUtilization}%`,
+      bankruptcyFlag: bankruptcies,
+      recentDelinquencies: delinquency,
+      impact: impact,
+      recommendation: riskLevel === 'High' ? 'Consider retention strategies' : 'Monitor for changes'
+    };
+  };
+
+  const generateCompetitiveRisk = (customer, policies) => {
+    const avgPremium = policies.reduce((sum, p) => sum + parseFloat(display(p.premium_annual) || '0'), 0) / (policies.length || 1);
+    const marketAvg = avgPremium * (0.85 + Math.random() * 0.3); // Simulate market data
+    
+    const competitiveDiff = ((avgPremium - marketAvg) / marketAvg) * 100;
+    
+    let riskLevel = 'Low';
+    let recommendation = 'Pricing competitive';
+    
+    if (competitiveDiff > 20) {
+      riskLevel = 'High';
+      recommendation = 'Consider price adjustment - 20%+ above market average';
+    } else if (competitiveDiff > 10) {
+      riskLevel = 'Medium';
+      recommendation = 'Monitor competitor pricing - 10-20% above market';
+    }
+    
+    return {
+      customerPremium: formatCurrency(avgPremium),
+      marketAverage: formatCurrency(marketAvg),
+      priceDifference: `${competitiveDiff > 0 ? '+' : ''}${competitiveDiff.toFixed(1)}%`,
+      riskLevel: riskLevel,
+      recommendation: recommendation
+    };
+  };
+
+  const detectLifeEvents = (customer) => {
+    const events = [];
+    const age = parseInt(display(customer.age) || '35');
+    const location = display(customer.location) || '';
+    
+    // Simulate life event detection
+    if (Math.random() > 0.7) events.push('Recent address change detected');
+    if (age >= 55 && Math.random() > 0.6) events.push('Approaching retirement age');
+    if (Math.random() > 0.8) events.push('New dependent added to policy');
+    if (Math.random() > 0.85) events.push('Marriage/partnership status change');
+    if (Math.random() > 0.9) events.push('New vehicle purchase detected');
+    
+    return {
+      detectedEvents: events,
+      hasEvents: events.length > 0,
+      impact: events.length > 1 ? 'Multiple life changes - high opportunity' : 
+              events.length === 1 ? 'Single life change - moderate opportunity' : 'No recent changes'
+    };
+  };
+
+  const determineActionPriority = (customer, policies) => {
+    const churnRisk = display(customer.churn_risk);
+    const tier = display(customer.tier)?.toLowerCase();
+    const clv = parseFloat(display(customer.clv) || '0');
+    
+    let priority = 'Medium';
+    let actions = [];
+    
+    if (churnRisk === 'High' || (tier === 'platinum' && clv > 75000)) {
+      priority = 'Critical';
+      actions.push('Immediate retention outreach');
+      actions.push('Executive relationship manager assignment');
+    } else if (policies.length === 1 || tier === 'gold') {
+      priority = 'High';
+      actions.push('Cross-sell campaign enrollment');
+      actions.push('Product bundle presentation');
+    } else {
+      actions.push('Standard marketing automation');
+      actions.push('Quarterly check-in');
+    }
+    
+    return {
+      priority: priority,
+      recommendedActions: actions,
+      timeline: priority === 'Critical' ? 'Within 24 hours' : 
+               priority === 'High' ? 'Within 1 week' : 'Within 1 month'
+    };
   };
 
   // Calculate dynamic metrics
@@ -236,6 +502,23 @@ export default function CustomerIntelligence() {
         setFilterRenewal('all');
     }
     setCurrentPage(1);
+  };
+
+  const handleProfileClick = async (customer) => {
+    setSelectedCustomer(customer);
+    setShowProfileModal(true);
+    setAiInsights(null);
+    
+    // Load customer policies and generate AI insights
+    const policies = await loadCustomerPolicies(display(customer.policyholder_id));
+    generateAIInsights(customer, policies);
+  };
+
+  const closeProfileModal = () => {
+    setShowProfileModal(false);
+    setSelectedCustomer(null);
+    setAiInsights(null);
+    setAiInsightsLoading(false);
   };
 
   const exportData = () => {
@@ -605,10 +888,10 @@ export default function CustomerIntelligence() {
                   </td>
                   <td className="actions">
                     <button 
-                      className="btn btn-sm btn-outline action-btn"
-                      onClick={() => alert(`Viewing profile for ${display(customer.first_name)} ${display(customer.last_name)}\n\nCustomer ID: ${value(customer.sys_id)}\nEmail: ${display(customer.email)}\nPhone: ${display(customer.phone)}\nCLV: ${formatCurrency(parseFloat(display(customer.clv) || '0'))}\nTier: ${display(customer.tier)}\nRisk Level: ${display(customer.risk_level)}`)}
+                      className="btn btn-sm btn-primary profile-btn"
+                      onClick={() => handleProfileClick(customer)}
                     >
-                      👁️ Profile
+                      👤 Profile
                     </button>
                   </td>
                 </tr>
@@ -663,6 +946,316 @@ export default function CustomerIntelligence() {
           </div>
         </div>
       </div>
+
+      {/* Profile Modal */}
+      {showProfileModal && selectedCustomer && (
+        <div className="profile-modal-overlay" onClick={closeProfileModal}>
+          <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="profile-modal-header">
+              <h2>Customer Profile & AI Insights</h2>
+              <button className="modal-close-btn" onClick={closeProfileModal}>
+                ✕
+              </button>
+            </div>
+            
+            <div className="profile-modal-content">
+              {/* Customer Details Section */}
+              <div className="profile-section customer-details">
+                <h3>📋 Customer Details</h3>
+                <div className="details-grid">
+                  <div className="detail-item">
+                    <label>Name:</label>
+                    <span>{display(selectedCustomer.first_name)} {display(selectedCustomer.last_name)}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Email:</label>
+                    <span>{display(selectedCustomer.email)}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Phone:</label>
+                    <span>{display(selectedCustomer.phone)}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Location:</label>
+                    <span>{display(selectedCustomer.location)}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Age:</label>
+                    <span>{display(selectedCustomer.age)} years</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Tenure:</label>
+                    <span>{display(selectedCustomer.tenure_months)} months</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Churn Score & Product Propensity */}
+              <div className="profile-section scores-section">
+                <div className="score-widget">
+                  <h4>🎯 Churn Risk Score</h4>
+                  <div className="score-display">
+                    <div className={`score-circle risk-${display(selectedCustomer.risk_level)?.toLowerCase()}`}>
+                      <span className="score-percentage">
+                        {display(selectedCustomer.churn_risk) || '25'}%
+                      </span>
+                    </div>
+                    <div className="score-label">
+                      {display(selectedCustomer.risk_level) || 'Medium'} Risk
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="score-widget">
+                  <h4>📈 Product Propensity Score</h4>
+                  <div className="score-display">
+                    <div className="score-circle propensity-score">
+                      <span className="score-percentage">
+                        {display(selectedCustomer.clv_score) || '78'}%
+                      </span>
+                    </div>
+                    <div className="score-label">
+                      {display(selectedCustomer.tier) || 'Gold'} Tier
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="clv-widget">
+                  <h4>💰 Customer Lifetime Value</h4>
+                  <div className="clv-amount">
+                    {formatCurrency(parseFloat(display(selectedCustomer.clv) || '0'))}
+                  </div>
+                  <div className="clv-label">12-Month CLV</div>
+                </div>
+              </div>
+
+              {/* AI Generated Insights */}
+              <div className="profile-section ai-insights-section">
+                <h3>🤖 AI-Generated Insights</h3>
+                
+                {aiInsightsLoading ? (
+                  <div className="ai-loading">
+                    <div className="ai-spinner"></div>
+                    <p>Analyzing customer data and generating personalized insights...</p>
+                    <div className="loading-progress">
+                      <div className="progress-bar"></div>
+                    </div>
+                  </div>
+                ) : aiInsights ? (
+                  <div className="insights-grid">
+                    
+                    {/* Cross-sell Opportunities */}
+                    {aiInsights.crossSellOpportunities.trigger && (
+                      <div className="insight-card cross-sell">
+                        <h4>🎯 Cross-sell Opportunities</h4>
+                        <div className="insight-content">
+                          <p className="insight-reason">{aiInsights.crossSellOpportunities.reason}</p>
+                          <div className="recommendations">
+                            <strong>Recommended Products:</strong>
+                            <ul>
+                              {aiInsights.crossSellOpportunities.recommendations.map((rec, i) => (
+                                <li key={i}>{rec}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="bundle-opportunity">
+                            <strong>Bundle Opportunity:</strong> {aiInsights.crossSellOpportunities.bundleOpportunity}
+                          </div>
+                          <div className="expected-uplift">
+                            <strong>Expected Uplift:</strong> {aiInsights.crossSellOpportunities.expectedUplift}
+                          </div>
+                        </div>
+                        <div className={`priority-badge priority-${aiInsights.crossSellOpportunities.priority.toLowerCase()}`}>
+                          {aiInsights.crossSellOpportunities.priority} Priority
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Upsell Opportunities */}
+                    {aiInsights.upsellOpportunities.trigger && (
+                      <div className="insight-card upsell">
+                        <h4>📈 Upsell Opportunities</h4>
+                        <div className="insight-content">
+                          <p className="insight-reason">{aiInsights.upsellOpportunities.reason}</p>
+                          <div className="recommendations">
+                            <strong>Recommended Upgrades:</strong>
+                            <ul>
+                              {aiInsights.upsellOpportunities.recommendations.map((rec, i) => (
+                                <li key={i}>{rec}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="property-risk">
+                            <strong>Property Risk:</strong> {aiInsights.upsellOpportunities.propertyRisk}
+                          </div>
+                          <div className="expected-uplift">
+                            <strong>Expected Uplift:</strong> {aiInsights.upsellOpportunities.expectedUplift}
+                          </div>
+                        </div>
+                        <div className={`priority-badge priority-${aiInsights.upsellOpportunities.priority.toLowerCase()}`}>
+                          {aiInsights.upsellOpportunities.priority} Priority
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Coverage Gaps */}
+                    {aiInsights.coverageGaps.hasGaps && (
+                      <div className="insight-card coverage-gaps">
+                        <h4>⚠️ Coverage Analysis</h4>
+                        <div className="insight-content">
+                          <div className="identified-gaps">
+                            <strong>Identified Gaps:</strong>
+                            <ul>
+                              {aiInsights.coverageGaps.identifiedGaps.map((gap, i) => (
+                                <li key={i}>{gap}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="risk-exposure">
+                            <strong>Risk Exposure:</strong> {aiInsights.coverageGaps.riskExposure}
+                          </div>
+                        </div>
+                        <div className={`priority-badge priority-${aiInsights.coverageGaps.priority.toLowerCase()}`}>
+                          {aiInsights.coverageGaps.priority} Priority
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Life Events */}
+                    {aiInsights.lifeEventsDetected.hasEvents && (
+                      <div className="insight-card life-events">
+                        <h4>🎉 Life Events Detected</h4>
+                        <div className="insight-content">
+                          <div className="detected-events">
+                            <strong>Recent Changes:</strong>
+                            <ul>
+                              {aiInsights.lifeEventsDetected.detectedEvents.map((event, i) => (
+                                <li key={i}>{event}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="impact">
+                            <strong>Impact:</strong> {aiInsights.lifeEventsDetected.impact}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Behavioral Insights */}
+                    <div className="insight-card behavioral">
+                      <h4>👤 Behavioral Insights</h4>
+                      <div className="insight-content">
+                        <div className="engagement-metrics">
+                          <div className="metric">
+                            <strong>Digital Engagement:</strong> {aiInsights.behavioralInsights.digitalEngagement}
+                          </div>
+                          <div className="metric">
+                            <strong>Session Quality:</strong> {aiInsights.behavioralInsights.sessionQuality}
+                          </div>
+                          <div className="metric">
+                            <strong>Service Interactions:</strong> {aiInsights.behavioralInsights.serviceInteractions}
+                          </div>
+                          <div className="metric">
+                            <strong>Billing Issues:</strong> {aiInsights.behavioralInsights.billingIrregularities}
+                          </div>
+                        </div>
+                        {aiInsights.behavioralInsights.insights.length > 0 && (
+                          <div className="behavioral-insights">
+                            <strong>Key Insights:</strong>
+                            <ul>
+                              {aiInsights.behavioralInsights.insights.map((insight, i) => (
+                                <li key={i}>{insight}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Credit Risk Analysis */}
+                    <div className="insight-card credit-risk">
+                      <h4>💳 Credit Risk Analysis</h4>
+                      <div className="insight-content">
+                        <div className="credit-metrics">
+                          <div className="metric">
+                            <strong>Credit Score:</strong> {aiInsights.creditRiskAnalysis.creditScore}
+                          </div>
+                          <div className="metric">
+                            <strong>Utilization Rate:</strong> {aiInsights.creditRiskAnalysis.utilizationRate}
+                          </div>
+                          <div className="metric">
+                            <strong>Risk Level:</strong> {aiInsights.creditRiskAnalysis.riskLevel}
+                          </div>
+                          <div className="metric">
+                            <strong>Bankruptcy Flag:</strong> {aiInsights.creditRiskAnalysis.bankruptcyFlag ? 'Yes' : 'No'}
+                          </div>
+                        </div>
+                        <div className="impact-analysis">
+                          <p><strong>Impact:</strong> {aiInsights.creditRiskAnalysis.impact}</p>
+                          <p><strong>Recommendation:</strong> {aiInsights.creditRiskAnalysis.recommendation}</p>
+                        </div>
+                      </div>
+                      <div className={`risk-badge risk-${aiInsights.creditRiskAnalysis.riskLevel.toLowerCase()}`}>
+                        {aiInsights.creditRiskAnalysis.riskLevel} Risk
+                      </div>
+                    </div>
+
+                    {/* Competitive Risk */}
+                    <div className="insight-card competitive">
+                      <h4>🏆 Market Competitiveness</h4>
+                      <div className="insight-content">
+                        <div className="pricing-analysis">
+                          <div className="metric">
+                            <strong>Customer Premium:</strong> {aiInsights.competitiveRisk.customerPremium}
+                          </div>
+                          <div className="metric">
+                            <strong>Market Average:</strong> {aiInsights.competitiveRisk.marketAverage}
+                          </div>
+                          <div className="metric">
+                            <strong>Price Difference:</strong> {aiInsights.competitiveRisk.priceDifference}
+                          </div>
+                        </div>
+                        <div className="recommendation">
+                          <p><strong>Recommendation:</strong> {aiInsights.competitiveRisk.recommendation}</p>
+                        </div>
+                      </div>
+                      <div className={`risk-badge risk-${aiInsights.competitiveRisk.riskLevel.toLowerCase()}`}>
+                        {aiInsights.competitiveRisk.riskLevel} Risk
+                      </div>
+                    </div>
+
+                    {/* Action Priority */}
+                    <div className="insight-card action-priority">
+                      <h4>🚀 Recommended Actions</h4>
+                      <div className="insight-content">
+                        <div className="action-list">
+                          <strong>Priority Actions:</strong>
+                          <ul>
+                            {aiInsights.actionPriority.recommendedActions.map((action, i) => (
+                              <li key={i}>{action}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="timeline">
+                          <strong>Timeline:</strong> {aiInsights.actionPriority.timeline}
+                        </div>
+                      </div>
+                      <div className={`priority-badge priority-${aiInsights.actionPriority.priority.toLowerCase()}`}>
+                        {aiInsights.actionPriority.priority} Priority
+                      </div>
+                    </div>
+
+                  </div>
+                ) : (
+                  <div className="ai-placeholder">
+                    <p>Click on a customer profile to generate AI insights...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* User Identity Display */}
       <div className="user-identity">
